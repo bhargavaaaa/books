@@ -7,6 +7,8 @@ use App\Http\Requests\PublicationRequest;
 use App\Models\Board;
 use App\Models\Publication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Yajra\DataTables\Facades\DataTables;
 
 class PublicationController extends Controller
@@ -32,9 +34,11 @@ class PublicationController extends Controller
     public function store(PublicationRequest $request)
     {
         $fileName = Null;
-        if ($request->file('image')) {
-            $fileName = $request->image->extension();
+        if ($file = $request->file('image')) {
+            $fileName = time() .".".$file->getClientOriginalExtension();
+            $file->storeAs('publication/',$fileName);
         }
+
 
         $publication = Publication::create([
             'publication_name'  => ucfirst(trim($request->name)),
@@ -47,7 +51,7 @@ class PublicationController extends Controller
 
         Helper::successMsg('insert', $this->moduleName);
 
-        return redirect($this->route . 'index');
+        return redirect(route($this->route . '.index'));
     }
 
 
@@ -92,8 +96,85 @@ class PublicationController extends Controller
             ->editColumn('publication_desc',function($row){
                 return $row->publication_desc;
             })
-            ->rawColumns(['action','board_id', 'publication_desc'])
+            ->editColumn('publication_photo',function($row){
+                if($row->publication_photo != null){
+                return '<img src="'.URL::to("/storage/app/publication/".$row->publication_photo).'" alt="publication image" heigth="100" width="150">';
+            }else{
+                return '---- No Image ----';
+                }
+            })
+            ->rawColumns(['action','board_id', 'publication_desc','publication_photo'])
             ->addIndexColumn()
             ->make(true);
+    }
+
+    public function edit($id)
+    {
+        $moduleName = $this->moduleName;
+        $boards = Board::get();
+        $publication = Publication::with('board')->find(decrypt($id));
+        $board_ids = array();
+        foreach($publication->board as $board){
+        array_push($board_ids,$board->id);
+        }
+        return view($this->view . '/_form', compact('moduleName', 'boards','publication','board_ids'));
+    }
+
+    public function update(PublicationRequest $request,$id)
+    {
+        $publication = Publication::with('board')->where('id',decrypt($id))->first();
+
+        $fileName = Null;
+        if ($file = $request->file('image')) {
+            if($request->old_image != null||$request->old_image != ''){
+                try {
+                unlink(storage_path('/app/publication/'.$request->old_image));
+            } catch (\Throwable $th) {}
+            }
+                $fileName = time() .".".$file->getClientOriginalExtension();
+                $file->storeAs('publication/',$fileName);
+        }else{
+            if($request->old_image == null||$request->old_image == ''){
+                try {
+                unlink(storage_path('/app/publication/'.$publication->publication_photo));
+            } catch (\Throwable $th) {}
+            }
+            $fileName = $request->old_image;
+        }
+
+
+        $publication->update([
+            'publication_name'  => ucfirst(trim($request->name)),
+            'publication_desc'  => $request->description,
+            'publication_photo' => $fileName,
+        ]);
+
+        if($request->board != null){
+            $board_id =  $request->board;
+            $publication->board()->sync($board_id);
+        }else{
+            $publication->board()->sync([]);
+        }
+
+        Helper::successMsg('update', $this->moduleName);
+
+        return redirect(route($this->route . '.index'));
+    }
+
+    public function delete(Request $request)
+    {
+        $res = false;
+        $publication = Publication::with('board')->where('id', decrypt($request->id))->first();
+        DB::beginTransaction();
+            $publication->board()->sync([]);
+            $res = $publication->delete();
+        DB::commit();
+        if ($res) {
+
+            Helper::successMsg('delete', $this->moduleName);
+        } else {
+            Helper::failarMsg('custom', 'There might be an Error!');
+        }
+        return response()->json($res);
     }
 }

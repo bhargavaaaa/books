@@ -1,26 +1,26 @@
 @extends('admin.layouts.master')
 @section('title')
-{{ $moduleName ?? '' }}
+    {{ $moduleName ?? '' }}
 @endsection
 
 @section('content')
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">{{ $moduleName ?? '' }}</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-                    <li class="breadcrumb-item active">{{ $moduleName ?? '' }}</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
-<!-- /.content-header -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">{{ $moduleName ?? '' }}</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
+                        <li class="breadcrumb-item active">{{ $moduleName ?? '' }}</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
@@ -109,11 +109,42 @@
             @endif
 
 
+            $('body').on('click', '.delete', function(e) {
+                let delId = $(this).data('id');
+                if (delId != '') {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "{{ route('publication.delete') }}",
+                                type: "POST",
+                                data: {
+                                    id: delId
+                                },
+                                success: function(response) {
+                                    if (response) {
+                                        location.reload();
+                                    }
+                                },
+                            });
+
+                        }
+                    });
+                }
+
+            });
 
             var datatable = $('.datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                pageLength: 50,
+                pageLength: 10,
                 ajax: {
                     "url": "{{ route('publication.getData') }}",
                     "dataType": "json",

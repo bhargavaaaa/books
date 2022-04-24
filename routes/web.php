@@ -77,7 +77,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/create', [PublicationController::class,'create'])->name('publication.create');
     Route::post('/store', [PublicationController::class,'store'])->name('publication.store');
     Route::get('/edit/{id}', [PublicationController::class,'edit'])->name('publication.edit');
-    Route::put('/update/{id}', [PublicationController::class,'update'])->name('publication.update');
+    Route::post('/update/{id}', [PublicationController::class,'update'])->name('publication.update');
     Route::post('/delete', [PublicationController::class,'delete'])->name('publication.delete');
     Route::get('/ActiveInactive/{type}/{id}',[PublicationController::class,'ActiveInactive'])->name('publication.activeInactive');
     });

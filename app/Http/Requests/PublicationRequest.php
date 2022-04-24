@@ -25,6 +25,7 @@ class PublicationRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'image' => 'mimes:png,jpg,jpeg|max:3072',
         ];
     }
 }

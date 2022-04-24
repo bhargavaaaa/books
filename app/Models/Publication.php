@@ -11,6 +11,6 @@ class Publication extends Model
     protected $guarded = [];
 
     public function board(){
-        return $this->belongsToMany(Board::class,'board_publications');
+        return $this->belongsToMany(Board::class,'board_publications')->withTimestamps();
     }
 }

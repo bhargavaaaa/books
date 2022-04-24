@@ -11,7 +11,8 @@
 
   @include('admin.layouts.partials.header')
 </head>
-<body class="hold-transition @if(Request::segment(2) == 'home') dark-mode @else light-mode @endif sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+{{-- <body class="hold-transition @if(Request::segment(2) == 'home') dark-mode @else light-mode @endif sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed"> --}}
+    <body class="hold-transition light-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
 
       <!-- Preloader -->
