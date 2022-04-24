@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\PublicationController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,4 +69,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('users/delete', [App\Http\Controllers\Admin\UserController::class,'delete'])->name('users.delete');
     Route::get('userActiveInactive/{type}/{id}',[App\Http\Controllers\Admin\UserController::class,'userActiveInactive'])->name('users.activeInactive');
     Route::get('userApproveDisapprove/{type}/{id}',[App\Http\Controllers\Admin\UserController::class,'userApproveDisapprove'])->name('users.approveDisapprove');
+
+    /** Routes For Publication */
+    Route::prefix('publication')->group(function () {
+    Route::get('/', [PublicationController::class,'index'])->name('publication.index');
+    Route::get('/getData', [PublicationController::class,'getData'])->name('publication.getData');
+    Route::get('/create', [PublicationController::class,'create'])->name('publication.create');
+    Route::post('/store', [PublicationController::class,'store'])->name('publication.store');
+    Route::get('/edit/{id}', [PublicationController::class,'edit'])->name('publication.edit');
+    Route::put('/update/{id}', [PublicationController::class,'update'])->name('publication.update');
+    Route::post('/delete', [PublicationController::class,'delete'])->name('publication.delete');
+    Route::get('/ActiveInactive/{type}/{id}',[PublicationController::class,'ActiveInactive'])->name('publication.activeInactive');
+    });
 });

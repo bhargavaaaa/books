@@ -69,6 +69,27 @@ class PermissionsTableSeeder extends Seeder
         /* if (Permission::where('name', '=', 'Active/Inactive Roles')->first() === null) {
             Permission::create(['name' => 'Active/Inactive Roles', 'slug' => 'activeinactive.roles', 'description' => 'Can Activate or deactivate roles', 'model' => 'Role',]);
         }*/
+
+        /* permission for Role module start */
+        if (Permission::where('name', '=', 'Create publications')->first() === null) {
+            Permission::create(['name' => 'Create publications', 'slug' => 'create.publications', 'description' => 'Can Add publications', 'model' => 'Publication',]);
+        }
+
+        if (Permission::where('name', '=', 'View publications')->first() === null) {
+            Permission::create(['name' => 'View publications', 'slug' => 'view.publications', 'description' => 'Can view publications', 'model' => 'Publication',]);
+        }
+
+        if (Permission::where('name', '=', 'Edit publications')->first() === null) {
+            Permission::create(['name' => 'Edit publications', 'slug' => 'edit.publications', 'description' => 'Can edit publications', 'model' => 'Publication',]);
+        }
+
+        if (Permission::where('name', '=', 'Delete publications')->first() === null) {
+            Permission::create(['name' => 'Delete publications', 'slug' => 'delete.publications', 'description' => 'Can Delete publications', 'model' => 'Publication',]);
+        }
+
+        /* if (Permission::where('name', '=', 'Active/Inactive publications')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive publications', 'slug' => 'activeinactive.publications', 'description' => 'Can Activate or deactivate publications', 'model' => 'Publication',]);
+        }*/
         /* permission for Role module end */
     }
 }

@@ -37,6 +37,15 @@
             </a>
           </li>
          @endpermission
+
+         @permission('view.publications')
+          <li class="nav-item">
+            <a href="{{route('publication.index')}}" class="nav-link {{ (\Request::segment(2) == 'publication') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-book"></i>
+              <p>Publication</p>
+            </a>
+          </li>
+         @endpermission
        </ul>
      </nav>
      <!-- /.sidebar-menu -->
