@@ -38,12 +38,14 @@
           </li>
          @endpermission
 
+        @permission('view.board')
          <li class="nav-item">
             <a href="{{route('board.index')}}" class="nav-link {{ (\Request::segment(2) == 'board') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-users"></i>
                 <p>Board</p>
             </a>
-        </li>
+         </li>
+        @endpermission
 
          @permission('view.publications')
           <li class="nav-item">

@@ -41,8 +41,9 @@
                             <thead>
                                 <tr>
                                     <th>Sr. No.</th>
-                                    <th>Board</th>
-                                    <th>Description</th>
+                                    <th>Boards</th>
+                                    <th>Board Description</th>
+                                    <th>Board Image</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -87,6 +88,9 @@
             },
             {
                 data: 'description'
+            },
+            {
+                data: 'image'
             },
             {
                 data: 'action',

@@ -89,6 +89,25 @@ class PermissionsTableSeeder extends Seeder
 
         /* permission for publication module end */
 
+        /* permission for board module start */
+        if (Permission::where('name', '=', 'Create Board')->first() === null) {
+            Permission::create(['name' => 'Create Board', 'slug' => 'create.board', 'description' => 'Can Add board', 'model' => 'Board',]);
+        }
+
+        if (Permission::where('name', '=', 'View Board')->first() === null) {
+            Permission::create(['name' => 'View Board', 'slug' => 'view.board', 'description' => 'Can view board', 'model' => 'Board',]);
+        }
+
+        if (Permission::where('name', '=', 'Edit Board')->first() === null) {
+            Permission::create(['name' => 'Edit Board', 'slug' => 'edit.board', 'description' => 'Can edit board', 'model' => 'Board',]);
+        }
+
+        if (Permission::where('name', '=', 'Delete Board')->first() === null) {
+            Permission::create(['name' => 'Delete Board', 'slug' => 'delete.board', 'description' => 'Can Delete board', 'model' => 'Board',]);
+        }
+
+        /* permission for board module end */
+
         /* permission for publication module start */
         if (Permission::where('name', '=', 'Create schools')->first() === null) {
             Permission::create(['name' => 'Create schools', 'slug' => 'create.schools', 'description' => 'Can Add schools', 'model' => 'School',]);

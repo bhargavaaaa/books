@@ -59,14 +59,23 @@
                                             Image <span class="requride_cls"></span>
                                         </label>
                                         <input type="file" name="image" class="form-control input-sm" id="image" placeholder="Image" value="{{ old('image') }}" accept="image/*">
+                                        <input type="hidden" class="file-input" name="old_image" id="old_image" value="{{ $board->image }}" />
                                         @if ($errors->has('image'))
                                             <span class="requride_cls"><strong>{{ $errors->first('image') }}</strong></span>
                                         @endif
                                     </div>
 
-                                    <div class="col-sm-3">
-                                        <a href="{{ url('storage/app/board/'. $board->image) }}" target="_blank"><img src="{{ url('storage/app/board/'. $board->image) }}" height="100" alt=""></a>
-                                    </div>
+                                    @if (isset($board->image))
+                                        <div class="col-sm-3">
+                                            <label for="image">
+                                                Old Image <span class="requride_cls"></span>
+                                            </label>
+                                            <div >
+                                                <a href="{{ url('storage/app/board/'. $board->image) }}" target="_blank"><img src="{{ url('storage/app/board/'. $board->image) }}" id="imgView" height="100" alt=""></a>
+                                            </div>
+                                            <a href="#" onclick="return removeImg()" id="removeImg">Remove Image</a>
+                                        </div>
+                                    @endif
 
                                     <div class="col-sm-12">
                                         <label for="description">
@@ -111,6 +120,11 @@
 @section('script')
 
 <script>
+     function removeImg(e) {
+        $('#imgView').attr('src','').hide(100);
+        $('#old_image').val('');
+        $('#removeImg').hide(100);
+    }
     $(document).ready(function(){
         $("#board_form").validate({
             rules: {

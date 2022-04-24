@@ -44,7 +44,17 @@ class BoardController extends Controller
 
             return $action;
         })
-        ->rawColumns(['action'])
+        ->editColumn('description', function($row){
+            return $row->description;
+        })
+        ->editColumn('image', function($row){
+            if($row->image != null) {
+                return '<img src="'. url('storage/app/board/'. $row->image ) .'" alt="publication image" heigth="100" width="150">';
+            } else {
+                return '---- No Image ----';
+            }
+        })
+        ->rawColumns(['action','description','image'])
         ->addIndexColumn()
         ->make(true);
 
@@ -73,7 +83,7 @@ class BoardController extends Controller
                 $fileName = time() . '.' . $image->getClientOriginalExtension();
                 $image->move('storage/app/board/', $fileName);
             } else {
-                $fileName = '';
+                $fileName = null;
             }
 
             $board = Board::create([
@@ -112,7 +122,7 @@ class BoardController extends Controller
                 if($request->hasFile('image'))
                 {
                     try{
-                        unlink(storage_path('app/board/'. $board->image));
+                        unlink(storage_path('/app/board/'. $board->image));
                     }catch(Throwable $e){
                     }
 
@@ -120,7 +130,13 @@ class BoardController extends Controller
                     $fileName = time() . '.' . $image->getClientOriginalExtension();
                     $image->move('storage/app/board/', $fileName);
                 } else {
-                    $fileName = $board->image;
+                    if($request->old_image == null || $request->old_image == ''){
+                        try{
+                            unlink(storage_path('/app/board/'. $board->image));
+                        }catch(Throwable $e){
+                        }
+                    }
+                    $fileName = $request->old_image;
                 }
 
                 $board->update([
@@ -140,6 +156,12 @@ class BoardController extends Controller
     {
         $board = Board::find(decrypt($id));
         DB::beginTransaction();
+            if(isset($board->image)) {
+                try{
+                    unlink(storage_path('/app/board/'. $board->image));
+                }catch(Throwable $e){
+                }
+            }
             $board->delete();
         DB::commit();
 
