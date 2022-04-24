@@ -37,6 +37,14 @@
             </a>
           </li>
          @endpermission
+
+        <li class="nav-item">
+            <a href="{{route('board.index')}}" class="nav-link {{ (\Request::segment(2) == 'board') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Board</p>
+            </a>
+        </li>
+
        </ul>
      </nav>
      <!-- /.sidebar-menu -->

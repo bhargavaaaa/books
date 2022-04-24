@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BoardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,4 +67,19 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('users/delete', [App\Http\Controllers\Admin\UserController::class,'delete'])->name('users.delete');
     Route::get('userActiveInactive/{type}/{id}',[App\Http\Controllers\Admin\UserController::class,'userActiveInactive'])->name('users.activeInactive');
     Route::get('userApproveDisapprove/{type}/{id}',[App\Http\Controllers\Admin\UserController::class,'userApproveDisapprove'])->name('users.approveDisapprove');
+
+    /* Route For Board */
+
+    Route::group(['prefix' => 'board'], function(){
+        Route::get('/',[BoardController::class, 'index'])->name('board.index');
+        Route::get('/getBoardData',[BoardController::class, 'getBoardData'])->name('board.getBoardData');
+        Route::get('/create',[BoardController::class, 'create'])->name('board.create');
+        Route::post('/store',[BoardController::class, 'store'])->name('board.store');
+        Route::get('/edit/{id}', [BoardController::class, 'edit'])->name('board.edit');
+        Route::put('/{id}', [BoardController::class, 'update'])->name('board.update');
+        Route::get('/delete/{id}',[BoardController::class, 'delete'])->name('board.delete');
+        Route::post('/checkBoardName',[BoardController::class, 'checkBoardName'])->name('board.checkBoardName');
+        Route::get('/boardActiveInactive/{id}',[BoardController::class, 'boardActiveInactive'])->name('board.activeInactive');
+    });
+
 });

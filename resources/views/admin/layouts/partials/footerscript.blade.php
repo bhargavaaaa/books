@@ -23,6 +23,10 @@
 <script src="{{ asset('public/assets/plugins/moment/moment.min.js')}}"></script>
 <!-- datepicker -->
 <script src="{{ asset('public/assets/plugins/datepicker/bootstrap-datepicker.min.js')}}"></script>
+
+<!-- Ckeditor SCRIPTS -->
+<script src="{{ asset('public/assets/plugins/ckeditor/ckeditor.js')}}"></script>
+
 <script>
   $(document).ready(function() {
 

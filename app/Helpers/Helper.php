@@ -27,11 +27,11 @@ class Helper
 			Session()->flash('message', $msg . ' Deactive Successfully !');
 		}
 
-		if ($type == 'approve') {
-			Session()->flash('message', $msg . ' Approved Successfully !');
-		} else {
-			Session()->flash('message', $msg . ' Disapproved Successfully !');
-		}
+		// if ($type == 'approve') {
+		// 	Session()->flash('message', $msg . ' Approved Successfully !');
+		// } else {
+		// 	Session()->flash('message', $msg . ' Disapproved Successfully !');
+		// }
 	}
 
 	public static function failarMsg($type, $msg)
