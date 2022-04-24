@@ -38,13 +38,30 @@
           </li>
          @endpermission
 
-        <li class="nav-item">
+         <li class="nav-item">
             <a href="{{route('board.index')}}" class="nav-link {{ (\Request::segment(2) == 'board') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-users"></i>
                 <p>Board</p>
             </a>
         </li>
 
+         @permission('view.publications')
+          <li class="nav-item">
+            <a href="{{route('publication.index')}}" class="nav-link {{ (\Request::segment(2) == 'publication') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-book"></i>
+              <p>Publication</p>
+            </a>
+          </li>
+         @endpermission
+
+         @permission('view.schools')
+          <li class="nav-item">
+            <a href="{{route('school.index')}}" class="nav-link {{ (\Request::segment(2) == 'school') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-school"></i>
+              <p>School</p>
+            </a>
+          </li>
+         @endpermission
        </ul>
      </nav>
      <!-- /.sidebar-menu -->

@@ -1,5 +1,9 @@
 ﻿/*
+<<<<<<< HEAD
  Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+=======
+ Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+>>>>>>> f8da2fc55fa369e7d802d16ac03720ccc5211aea
  For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.plugins.setLang("specialchar","bg",{euro:"Евро знак",lsquo:"Лява маркировка за цитат",rsquo:"Дясна маркировка за цитат",ldquo:"Лява двойна кавичка за цитат",rdquo:"Дясна двойна кавичка за цитат",ndash:"\\\\",mdash:"/",iexcl:"Обърната питанка",cent:"Знак за цент",pound:"Знак за паунд",curren:"Валутен знак",yen:"Знак за йена",brvbar:"Прекъсната линия",sect:"Знак за секция",uml:"Diaeresis",copy:"Знак за Copyright",ordf:"Женски ординарен индикатор",laquo:"Знак с двоен ъгъл за означаване на лява посока",

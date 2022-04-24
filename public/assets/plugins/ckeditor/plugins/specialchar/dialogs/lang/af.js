@@ -1,5 +1,9 @@
 ﻿/*
+<<<<<<< HEAD
  Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+=======
+ Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+>>>>>>> f8da2fc55fa369e7d802d16ac03720ccc5211aea
  For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.plugins.setLang("specialchar","af",{euro:"Euroteken",lsquo:"Linker enkelkwotasie",rsquo:"Regter enkelkwotasie",ldquo:"Linker dubbelkwotasie",rdquo:"Regter dubbelkwotasie",ndash:"Kortkoppelteken",mdash:"Langkoppelteken",iexcl:"Omgekeerdeuitroepteken",cent:"Centteken",pound:"Pondteken",curren:"Geldeenheidteken",yen:"Yenteken",brvbar:"Gebreekte balk",sect:"Afdeelingsteken",uml:"Deelteken",copy:"Kopieregteken",ordf:"Vroulikekenteken",laquo:"Linkgeoorienteerde aanhaalingsteken",not:"Verbodeteken",

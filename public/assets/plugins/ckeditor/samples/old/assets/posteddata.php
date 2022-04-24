@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <?php
 /*
+<<<<<<< HEAD
 Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+=======
+Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+>>>>>>> f8da2fc55fa369e7d802d16ac03720ccc5211aea
 For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 ?>
@@ -53,7 +57,11 @@ if (!empty($_POST))
 			CKEditor - The text editor for the Internet - <a class="samples" href="https://ckeditor.com/">https://ckeditor.com</a>
 		</p>
 		<p id="copy">
+<<<<<<< HEAD
 			Copyright &copy; 2003-2020, <a class="samples" href="https://cksource.com/">CKSource</a> - Frederico Knabben. All rights reserved.
+=======
+			Copyright &copy; 2003-2021, <a class="samples" href="https://cksource.com/">CKSource</a> - Frederico Knabben. All rights reserved.
+>>>>>>> f8da2fc55fa369e7d802d16ac03720ccc5211aea
 		</p>
 	</div>
 </body>

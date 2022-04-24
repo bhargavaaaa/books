@@ -1,5 +1,9 @@
 ﻿/*
+<<<<<<< HEAD
  Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+=======
+ Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+>>>>>>> f8da2fc55fa369e7d802d16ac03720ccc5211aea
  For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.plugins.setLang("a11yhelp","ro",{title:"Instrucțiuni Accesibilitate",contents:"Cuprins. Pentru a închide acest dialog, apăsați tasta ESC.",legend:[{name:"General",items:[{name:"Editor bară de instrumente.",legend:"Apasă ${toolbarFocus} pentru a naviga pe de instrumente. Pentru deplasarea la următorul sau anteriorul grup de instrumente se folosesc tastele TAB și SHIFT+TAB. Pentru deplasare pe urmatorul sau anteriorul instrument se folosesc tastele SĂGEATĂ DREAPTA sau SĂGEATĂ STÂNGA. Tasta SPAȚIU sau ENTER activează instrumentul."},

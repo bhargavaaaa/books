@@ -1,5 +1,9 @@
 ﻿/*
+<<<<<<< HEAD
  Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+=======
+ Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+>>>>>>> f8da2fc55fa369e7d802d16ac03720ccc5211aea
  For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.plugins.setLang("specialchar","cs",{euro:"Znak eura",lsquo:"Počáteční uvozovka jednoduchá",rsquo:"Koncová uvozovka jednoduchá",ldquo:"Počáteční uvozovka dvojitá",rdquo:"Koncová uvozovka dvojitá",ndash:"En pomlčka",mdash:"Em pomlčka",iexcl:"Obrácený vykřičník",cent:"Znak centu",pound:"Znak libry",curren:"Znak měny",yen:"Znak jenu",brvbar:"Přerušená svislá čára",sect:"Znak oddílu",uml:"Přehláska",copy:"Znak copyrightu",ordf:"Ženský indikátor rodu",laquo:"Znak dvojitých lomených uvozovek vlevo",

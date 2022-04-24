@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\Admin\BoardController;
+use App\Http\Controllers\SchoolController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -82,4 +86,26 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/boardActiveInactive/{id}',[BoardController::class, 'boardActiveInactive'])->name('board.activeInactive');
     });
 
+    /** Routes For Publication */
+    Route::prefix('publication')->group(function () {
+    Route::get('/', [PublicationController::class,'index'])->name('publication.index');
+    Route::get('/getData', [PublicationController::class,'getData'])->name('publication.getData');
+    Route::get('/create', [PublicationController::class,'create'])->name('publication.create');
+    Route::post('/store', [PublicationController::class,'store'])->name('publication.store');
+    Route::get('/edit/{id}', [PublicationController::class,'edit'])->name('publication.edit');
+    Route::post('/update/{id}', [PublicationController::class,'update'])->name('publication.update');
+    Route::post('/delete', [PublicationController::class,'delete'])->name('publication.delete');
+    Route::get('/ActiveInactive/{type}/{id}',[PublicationController::class,'ActiveInactive'])->name('publication.activeInactive');
+    });
+
+    Route::prefix('school')->group(function () {
+    Route::get('/', [SchoolController::class,'index'])->name('school.index');
+    Route::get('/getData', [SchoolController::class,'getData'])->name('school.getData');
+    Route::get('/create', [SchoolController::class,'create'])->name('school.create');
+    Route::post('/store', [SchoolController::class,'store'])->name('school.store');
+    Route::get('/edit/{id}', [SchoolController::class,'edit'])->name('school.edit');
+    Route::post('/update/{id}', [SchoolController::class,'update'])->name('school.update');
+    Route::post('/delete', [SchoolController::class,'delete'])->name('school.delete');
+    Route::get('/ActiveInactive/{type}/{id}',[SchoolController::class,'ActiveInactive'])->name('school.activeInactive');
+    });
 });
