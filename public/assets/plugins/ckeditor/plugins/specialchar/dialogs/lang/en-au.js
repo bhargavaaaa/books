@@ -1,9 +1,5 @@
 ﻿/*
-<<<<<<< HEAD
  Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
-=======
- Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
->>>>>>> f8da2fc55fa369e7d802d16ac03720ccc5211aea
  For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 CKEDITOR.plugins.setLang("specialchar","en-au",{euro:"Euro sign",lsquo:"Left single quotation mark",rsquo:"Right single quotation mark",ldquo:"Left double quotation mark",rdquo:"Right double quotation mark",ndash:"En dash",mdash:"Em dash",iexcl:"Inverted exclamation mark",cent:"Cent sign",pound:"Pound sign",curren:"Currency sign",yen:"Yen sign",brvbar:"Broken bar",sect:"Section sign",uml:"Diaeresis",copy:"Copyright sign",ordf:"Feminine ordinal indicator",laquo:"Left-pointing double angle quotation mark",
