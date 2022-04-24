@@ -28,19 +28,19 @@
                 <div class="col-12 col-lg order-1 order-lg-0">
                     <div class="card mb-5">
                         <div class="card-header">
-                            <h3 class="card-title">{{ $moduleName }} Edit</h3>
+                            <h3 class="card-title">{{ $moduleName }} Create</h3>
                             <div class="card-tools">
                             </div>
                         </div>
                         <div class="card-body table-responsive">
-                            <form action="{{ route('publication.update', encrypt($publication->id)) }}" method="POST"
-                                enctype="multipart/form-data" id="form">
+                            <form action="{{ route('school.store') }}" method="POST" enctype="multipart/form-data"
+                                id="form">
                                 @csrf()
                                 <div class="row g-3">
                                     <div class="col-md-5 mb-3 col-sm-12">
                                         <label class="form-label">Name <span class="requride_cls">*</span></label>
                                         <input type="text" class="form-control" name="name" id="name" placeholder="Name"
-                                            value="{{ old('name', $publication->publication_name) }}" />
+                                            value="{{ old('name') }}" />
                                         @error('name')
                                             <span class="error">
                                                 <strong>{{ $message }}</strong>
@@ -54,9 +54,7 @@
                                             <select class="select2 select2bs4 form-control" id="board" name="board[]"
                                                 multiple>
                                                 @foreach ($boards as $board)
-                                                    <option value="{{ $board->id }}"
-                                                        @if (in_array($board->id, $board_ids)) selected @else null @endif>
-                                                        {{ $board->name }}</option>
+                                                    <option value="{{ $board->id }}">{{ $board->name }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
@@ -69,12 +67,26 @@
                                 </div>
                                 <div class="row g-3">
                                     <div class="col-md-5 mb-3 col-sm-12">
+                                        <label for="publication">Publication </label>
+                                        <td>
+                                            <select class="select2 select2bs4 form-control" id="publication" name="publication[]"
+                                                multiple>
+                                                @foreach ($publications as $publication)
+                                                    <option value="{{ $publication->id }}">{{ $publication->publication_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        @error('publication')
+                                            <span class="error">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3 col-sm-12">
                                         <label for="board">Image </label>
                                         <div>
                                             <input type="file" class="file-input" name="image" id="image"
                                                 placeholder="Image" accept="image/png, image/jpg, image/jpeg" />
-                                            <input type="hidden" class="file-input" name="old_image" id="old_image"
-                                                value="{{ $publication->publication_photo }}" />
                                             @error('image')
                                                 <span class="error">
                                                     <strong>{{ $message }}</strong>
@@ -82,22 +94,10 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    @if (isset($publication->publication_photo))
-                                        <div class="col-md-5 mb-3 col-sm-12">
-                                            <label for="board">Old Image </label>
-                                            <div>
-                                                <img src="{{ url('storage/app/publication/' . $publication->publication_photo) }}"
-                                                    id="imgView" alt="Image Not load" height="100" width="100">
-                                                <br>
-                                                <a href="#" onclick="return removeImg()" id="removeImg">Remove Image</a>
-                                            </div>
-                                        </div>
-                                    @endif
 
                                     <div class="col-md-12 mb-3 col-sm-12">
-                                        <label for="description">Description</label>
-                                        <textarea class="ckeditor form-control description" name="description"
-                                            id="description">{!! $publication->publication_desc !!}</textarea>
+                                        <label for="description">Description </label>
+                                        <textarea class="ckeditor form-control description" name="description" id="description"></textarea>
 
                                         <span id='ckdescription' class="error"></span>
                                         @error('description')
@@ -128,11 +128,6 @@
 
 @section('script')
     <script>
-            function removeImg(e) {
-                $('#imgView').attr('src','').hide(100);
-                $('#old_image').val('');
-                $('#removeImg').hide(100);
-            }
         jQuery(document).ready(function() {
 
             $("#form").submit(function(e) {

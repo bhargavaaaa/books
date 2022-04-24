@@ -48,7 +48,7 @@
                             </div>
 
                             <div class="col-md-7 mb-3 col-sm-12">
-                                <label for="board">board </label>
+                                <label for="board">Board </label>
                                 <td>
                                     <select class="select2 select2bs4 form-control" id="board"
                                         name="board[]" multiple>

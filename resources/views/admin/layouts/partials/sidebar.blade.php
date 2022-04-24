@@ -46,6 +46,15 @@
             </a>
           </li>
          @endpermission
+
+         @permission('view.schools')
+          <li class="nav-item">
+            <a href="{{route('school.index')}}" class="nav-link {{ (\Request::segment(2) == 'school') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-school"></i>
+              <p>School</p>
+            </a>
+          </li>
+         @endpermission
        </ul>
      </nav>
      <!-- /.sidebar-menu -->

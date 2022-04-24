@@ -70,7 +70,7 @@ class PermissionsTableSeeder extends Seeder
             Permission::create(['name' => 'Active/Inactive Roles', 'slug' => 'activeinactive.roles', 'description' => 'Can Activate or deactivate roles', 'model' => 'Role',]);
         }*/
 
-        /* permission for Role module start */
+        /* permission for publication module start */
         if (Permission::where('name', '=', 'Create publications')->first() === null) {
             Permission::create(['name' => 'Create publications', 'slug' => 'create.publications', 'description' => 'Can Add publications', 'model' => 'Publication',]);
         }
@@ -87,9 +87,25 @@ class PermissionsTableSeeder extends Seeder
             Permission::create(['name' => 'Delete publications', 'slug' => 'delete.publications', 'description' => 'Can Delete publications', 'model' => 'Publication',]);
         }
 
-        /* if (Permission::where('name', '=', 'Active/Inactive publications')->first() === null) {
-            Permission::create(['name' => 'Active/Inactive publications', 'slug' => 'activeinactive.publications', 'description' => 'Can Activate or deactivate publications', 'model' => 'Publication',]);
-        }*/
-        /* permission for Role module end */
+        /* permission for publication module end */
+
+        /* permission for publication module start */
+        if (Permission::where('name', '=', 'Create schools')->first() === null) {
+            Permission::create(['name' => 'Create schools', 'slug' => 'create.schools', 'description' => 'Can Add schools', 'model' => 'School',]);
+        }
+
+        if (Permission::where('name', '=', 'View schools')->first() === null) {
+            Permission::create(['name' => 'View schools', 'slug' => 'view.schools', 'description' => 'Can view schools', 'model' => 'School',]);
+        }
+
+        if (Permission::where('name', '=', 'Edit schools')->first() === null) {
+            Permission::create(['name' => 'Edit schools', 'slug' => 'edit.schools', 'description' => 'Can edit schools', 'model' => 'School',]);
+        }
+
+        if (Permission::where('name', '=', 'Delete schools')->first() === null) {
+            Permission::create(['name' => 'Delete schools', 'slug' => 'delete.schools', 'description' => 'Can Delete schools', 'model' => 'School',]);
+        }
+
+        /* permission for publication module end */
     }
 }

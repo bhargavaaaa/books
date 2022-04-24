@@ -33,14 +33,14 @@
                             </div>
                         </div>
                         <div class="card-body table-responsive">
-                            <form action="{{ route('publication.update', encrypt($publication->id)) }}" method="POST"
+                            <form action="{{ route('school.update', encrypt($school->id)) }}" method="POST"
                                 enctype="multipart/form-data" id="form">
                                 @csrf()
                                 <div class="row g-3">
                                     <div class="col-md-5 mb-3 col-sm-12">
                                         <label class="form-label">Name <span class="requride_cls">*</span></label>
                                         <input type="text" class="form-control" name="name" id="name" placeholder="Name"
-                                            value="{{ old('name', $publication->publication_name) }}" />
+                                            value="{{ old('name', $school->school_name) }}" />
                                         @error('name')
                                             <span class="error">
                                                 <strong>{{ $message }}</strong>
@@ -69,12 +69,29 @@
                                 </div>
                                 <div class="row g-3">
                                     <div class="col-md-5 mb-3 col-sm-12">
+                                        <label for="publication">Publication</label>
+                                        <td>
+                                            <select class="select2 select2bs4 form-control" id="publication" name="publication[]"
+                                                multiple>
+                                                @foreach ($publications as $publication)
+                                                    <option value="{{ $publication->id }}"
+                                                        @if (in_array($publication->id, $publication_ids)) selected @else null @endif>{{ $publication->publication_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        @error('publication')
+                                            <span class="error">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-4 mb-3 col-sm-12">
                                         <label for="board">Image </label>
                                         <div>
                                             <input type="file" class="file-input" name="image" id="image"
                                                 placeholder="Image" accept="image/png, image/jpg, image/jpeg" />
                                             <input type="hidden" class="file-input" name="old_image" id="old_image"
-                                                value="{{ $publication->publication_photo }}" />
+                                                value="{{ $school->school_photo }}" />
                                             @error('image')
                                                 <span class="error">
                                                     <strong>{{ $message }}</strong>
@@ -82,11 +99,11 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    @if (isset($publication->publication_photo))
-                                        <div class="col-md-5 mb-3 col-sm-12">
+                                    @if (isset($school->school_photo))
+                                        <div class="col-md-2 mb-3 col-sm-12">
                                             <label for="board">Old Image </label>
                                             <div>
-                                                <img src="{{ url('storage/app/publication/' . $publication->publication_photo) }}"
+                                                <img src="{{ url('storage/app/school/' . $school->school_photo) }}"
                                                     id="imgView" alt="Image Not load" height="100" width="100">
                                                 <br>
                                                 <a href="#" onclick="return removeImg()" id="removeImg">Remove Image</a>
@@ -97,7 +114,7 @@
                                     <div class="col-md-12 mb-3 col-sm-12">
                                         <label for="description">Description</label>
                                         <textarea class="ckeditor form-control description" name="description"
-                                            id="description">{!! $publication->publication_desc !!}</textarea>
+                                            id="description">{!! $school->school_desc !!}</textarea>
 
                                         <span id='ckdescription' class="error"></span>
                                         @error('description')
