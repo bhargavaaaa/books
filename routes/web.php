@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\Admin\BoardController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -107,5 +108,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('/update/{id}', [SchoolController::class,'update'])->name('school.update');
     Route::post('/delete', [SchoolController::class,'delete'])->name('school.delete');
     Route::get('/ActiveInactive/{type}/{id}',[SchoolController::class,'ActiveInactive'])->name('school.activeInactive');
+    });
+
+    Route::group(['prefix' => 'category'], function(){
+        Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+        Route::get('/getCategoryData', [CategoryController::class, 'getCategoryData'])->name('category.getCategoryData');
+        Route::get('/create', [CategoryController::class, 'create'])->name('category.create');
+        Route::post('/store', [CategoryController::class, 'store'])->name('category.store');
+        Route::get('/edit/{id}', [CategoryController::class,'edit'])->name('category.edit');
+        Route::post('/{id}', [CategoryController::class, 'update'])->name('category.update');
+        Route::get('/delete/{id}',[CategoryController::class, 'delete'])->name('category.delete');
+        Route::post('/checkCategoryName',[CategoryController::class, 'checkCategoryName'])->name('category.checkCategoryName');
+        Route::get('/categoryActiveInactive/{id}',[CategoryController::class, 'categoryActiveInactive'])->name('category.activeInactive');
     });
 });

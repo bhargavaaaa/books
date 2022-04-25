@@ -64,6 +64,13 @@
             </a>
           </li>
          @endpermission
+
+         <li class="nav-item">
+            <a href="{{ route('category.index') }}" class="nav-link {{ (\Request::segment(2) == 'category') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-users"></i>
+              <p>Category</p>
+            </a>
+          </li>
        </ul>
      </nav>
      <!-- /.sidebar-menu -->
