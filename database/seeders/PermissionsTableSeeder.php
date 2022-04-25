@@ -111,7 +111,7 @@ class PermissionsTableSeeder extends Seeder
 
         /* permission for board module end */
 
-        /* permission for publication module start */
+        /* permission for school module start */
         if (Permission::where('name', '=', 'Create schools')->first() === null) {
             Permission::create(['name' => 'Create schools', 'slug' => 'create.schools', 'description' => 'Can Add schools', 'model' => 'School',]);
         }
@@ -130,9 +130,7 @@ class PermissionsTableSeeder extends Seeder
         if (Permission::where('name', '=', 'Active/Inactive schools')->first() === null) {
             Permission::create(['name' => 'Active/Inactive schools', 'slug' => 'activeinactive.schools', 'description' => 'Can Activate or deactivate schools', 'model' => 'School',]);
         }
-
-        /* permission for publication module end */
-
+        /* permission for school module end */
 
         /* permission for category module start */
         if (Permission::where('name', '=', 'Create Category')->first() === null) {
@@ -155,5 +153,27 @@ class PermissionsTableSeeder extends Seeder
         }
 
         /* permission for category module end */
+
+        /* permission for product module start */
+        if (Permission::where('name', '=', 'Create products')->first() === null) {
+            Permission::create(['name' => 'Create products', 'slug' => 'create.products', 'description' => 'Can Add products', 'model' => 'Product',]);
+        }
+
+        if (Permission::where('name', '=', 'View products')->first() === null) {
+            Permission::create(['name' => 'View products', 'slug' => 'view.products', 'description' => 'Can view products', 'model' => 'Product',]);
+        }
+
+        if (Permission::where('name', '=', 'Edit products')->first() === null) {
+            Permission::create(['name' => 'Edit products', 'slug' => 'edit.products', 'description' => 'Can edit products', 'model' => 'Product',]);
+        }
+
+        if (Permission::where('name', '=', 'Delete products')->first() === null) {
+            Permission::create(['name' => 'Delete products', 'slug' => 'delete.products', 'description' => 'Can Delete products', 'model' => 'Product',]);
+        }
+        if (Permission::where('name', '=', 'Active/Inactive products')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive products', 'slug' => 'activeinactive.products', 'description' => 'Can Activate or deactivate products', 'model' => 'Product',]);
+        }
+
+        /* permission for product module end */
     }
 }

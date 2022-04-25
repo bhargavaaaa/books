@@ -17,4 +17,8 @@ class School extends Model
     public function publication(){
         return $this->belongsToMany(Publication::class,'publication_schools')->withTimestamps();
     }
+
+    public function SetActive(){
+        return $this->where('is_active','=',1);
+    }
 }
