@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\Admin\BoardController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
@@ -96,7 +97,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/edit/{id}', [PublicationController::class,'edit'])->name('publication.edit');
     Route::post('/update/{id}', [PublicationController::class,'update'])->name('publication.update');
     Route::post('/delete', [PublicationController::class,'delete'])->name('publication.delete');
-    Route::get('/ActiveInactive/{type}/{id}',[PublicationController::class,'ActiveInactive'])->name('publication.activeInactive');
+    Route::get('/ActiveInactive/{id}',[PublicationController::class,'ActiveInactive'])->name('publication.activeInactive');
     });
 
     Route::prefix('school')->group(function () {
@@ -107,7 +108,29 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/edit/{id}', [SchoolController::class,'edit'])->name('school.edit');
     Route::post('/update/{id}', [SchoolController::class,'update'])->name('school.update');
     Route::post('/delete', [SchoolController::class,'delete'])->name('school.delete');
-    Route::get('/ActiveInactive/{type}/{id}',[SchoolController::class,'ActiveInactive'])->name('school.activeInactive');
+    Route::get('/ActiveInactive/{id}',[SchoolController::class,'ActiveInactive'])->name('school.activeInactive');
+    });
+
+    Route::prefix('product')->group(function () {
+    Route::get('/', [ProductController::class,'index'])->name('product.index');
+    Route::get('/getData', [ProductController::class,'getData'])->name('product.getData');
+    Route::get('/create', [ProductController::class,'create'])->name('product.create');
+    Route::post('/store', [ProductController::class,'store'])->name('product.store');
+    Route::get('/edit/{id}', [ProductController::class,'edit'])->name('product.edit');
+    Route::post('/update/{id}', [ProductController::class,'update'])->name('product.update');
+    Route::post('/delete', [ProductController::class,'delete'])->name('product.delete');
+    Route::get('/ActiveInactive/{id}',[ProductController::class,'ActiveInactive'])->name('product.activeInactive');
+    });
+
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [OrdersController::class, 'index'])->name('orders.index');
+        Route::post('getReceivedOrdersData', [OrdersController::class, 'getReceivedOrdersData'])->name('orders.getReceivedOrdersData');
+        Route::post('getShippedOrdersData', [OrdersController::class, 'getShippedOrdersData'])->name('orders.getShippedOrdersData');
+        Route::post('getDeliveredOrdersData', [OrdersController::class, 'getDeliveredOrdersData'])->name('orders.getDeliveredOrdersData');
+        Route::post('getCancelledOrdersData', [OrdersController::class, 'getCancelledOrdersData'])->name('orders.getCancelledOrdersData');
+        Route::post('getRejectedOrdersData', [OrdersController::class, 'getRejectedOrdersData'])->name('orders.getRejectedOrdersData');
+        Route::get('show/{id}', [OrdersController::class, 'show'])->name('orders.show');
+        Route::post('state/change/{id}', [OrdersController::class, 'show'])->name('orders.state.change');
     });
 
     Route::group(['prefix' => 'category'], function(){

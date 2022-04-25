@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSchoolsTable extends Migration
+class CreateOrderHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateSchoolsTable extends Migration
      */
     public function up()
     {
-        Schema::create('schools', function (Blueprint $table) {
+        Schema::create('order_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('school_name');
-            $table->string('school_photo')->nullable();
-            $table->longText('school_desc')->nullable();
-            $table->boolean('is_active')->comment('0-in_active, 1-active')->default(0);
+            $table->bigInteger('order_id')->unsigned();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateSchoolsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schools');
+        Schema::dropIfExists('order_histories');
     }
 }

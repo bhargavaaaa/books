@@ -70,6 +70,7 @@ class PermissionsTableSeeder extends Seeder
             Permission::create(['name' => 'Active/Inactive Roles', 'slug' => 'activeinactive.roles', 'description' => 'Can Activate or deactivate roles', 'model' => 'Role',]);
         }*/
 
+
         /* permission for publication module start */
         if (Permission::where('name', '=', 'Create publications')->first() === null) {
             Permission::create(['name' => 'Create publications', 'slug' => 'create.publications', 'description' => 'Can Add publications', 'model' => 'Publication',]);
@@ -86,7 +87,9 @@ class PermissionsTableSeeder extends Seeder
         if (Permission::where('name', '=', 'Delete publications')->first() === null) {
             Permission::create(['name' => 'Delete publications', 'slug' => 'delete.publications', 'description' => 'Can Delete publications', 'model' => 'Publication',]);
         }
-
+        if (Permission::where('name', '=', 'Active/Inactive publications')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive publications', 'slug' => 'activeinactive.publications', 'description' => 'Can Activate or deactivate publications', 'model' => 'Publication',]);
+        }
         /* permission for publication module end */
 
         /* permission for board module start */
@@ -123,6 +126,9 @@ class PermissionsTableSeeder extends Seeder
 
         if (Permission::where('name', '=', 'Delete schools')->first() === null) {
             Permission::create(['name' => 'Delete schools', 'slug' => 'delete.schools', 'description' => 'Can Delete schools', 'model' => 'School',]);
+        }
+        if (Permission::where('name', '=', 'Active/Inactive schools')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive schools', 'slug' => 'activeinactive.schools', 'description' => 'Can Activate or deactivate schools', 'model' => 'School',]);
         }
 
         /* permission for publication module end */

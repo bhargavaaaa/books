@@ -10,7 +10,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\PermissionRole;
 use jeremykenedy\LaravelRoles\Models\Permission;
-use DataTables;
 use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
@@ -28,7 +27,7 @@ class RoleController extends Controller
     public function getRoleData(Request $request)
     {
         $roles = Role::select();
-        return DataTables::eloquent($roles)
+        return datatables()->eloquent($roles)
             ->addColumn('action', function ($roles) {
                 $editUrl = route('role.edit', encrypt($roles->id));
                 $deleteId = encrypt($roles->id);
