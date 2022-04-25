@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\Admin\BoardController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -107,5 +108,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('/update/{id}', [SchoolController::class,'update'])->name('school.update');
     Route::post('/delete', [SchoolController::class,'delete'])->name('school.delete');
     Route::get('/ActiveInactive/{id}',[SchoolController::class,'ActiveInactive'])->name('school.activeInactive');
+    });
+
+    Route::prefix('product')->group(function () {
+    Route::get('/', [ProductController::class,'index'])->name('product.index');
+    Route::get('/getData', [ProductController::class,'getData'])->name('product.getData');
+    Route::get('/create', [ProductController::class,'create'])->name('product.create');
+    Route::post('/store', [ProductController::class,'store'])->name('product.store');
+    Route::get('/edit/{id}', [ProductController::class,'edit'])->name('product.edit');
+    Route::post('/update/{id}', [ProductController::class,'update'])->name('product.update');
+    Route::post('/delete', [ProductController::class,'delete'])->name('product.delete');
+    Route::get('/ActiveInactive/{id}',[ProductController::class,'ActiveInactive'])->name('product.activeInactive');
     });
 });
