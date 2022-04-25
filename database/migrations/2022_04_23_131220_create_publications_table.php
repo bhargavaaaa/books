@@ -17,7 +17,8 @@ class CreatePublicationsTable extends Migration
             $table->id();
             $table->string('publication_name');
             $table->string('publication_photo')->nullable();
-            $table->string('publication_desc')->nullable();
+            $table->longText('publication_desc')->nullable();
+            $table->boolean('is_active')->comment('0-in_active, 1-active')->default(0);
             $table->timestamps();
         });
     }

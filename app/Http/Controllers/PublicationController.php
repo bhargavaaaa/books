@@ -44,6 +44,7 @@ class PublicationController extends Controller
             'publication_name'  => ucfirst(trim($request->name)),
             'publication_desc'  => $request->description,
             'publication_photo' => $fileName,
+            'is_active' => $request->is_active,
         ]);
 
         $board_id =  $request->board;
@@ -64,8 +65,8 @@ class PublicationController extends Controller
                 $editUrl = route($this->route . '.edit', encrypt($row->id));
                 $deleteId = encrypt($row->id);
 
-                $activeUrl = url('admin/ActiveInactive/active/' . $row->id);
-                $deactiveUrl = url('admin/ActiveInactive/deactive/' . $row->id);
+                $activeUrl = route('publication.activeInactive',encrypt($row->id));
+                $deactiveUrl = route('publication.activeInactive',encrypt($row->id));
 
 
 
@@ -96,6 +97,13 @@ class PublicationController extends Controller
             ->editColumn('publication_desc',function($row){
                 return $row->publication_desc;
             })
+            ->editColumn('is_active',function($row){
+                if($row->is_active == 1){
+                    return '<span class="badge badge-success">Active</span>';
+                }else{
+                    return '<span class="badge badge-danger">In Active</span>';
+                }
+            })
             ->editColumn('publication_photo',function($row){
                 if($row->publication_photo != null){
                 return '<img src="'.URL::to("/storage/app/publication/".$row->publication_photo).'" alt="publication image" heigth="100" width="150">';
@@ -103,7 +111,7 @@ class PublicationController extends Controller
                 return '---- No Image ----';
                 }
             })
-            ->rawColumns(['action','board_id', 'publication_desc','publication_photo'])
+            ->rawColumns(['action','board_id', 'publication_desc','publication_photo','is_active'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -147,6 +155,7 @@ class PublicationController extends Controller
             'publication_name'  => ucfirst(trim($request->name)),
             'publication_desc'  => $request->description,
             'publication_photo' => $fileName,
+            'is_active' => $request->is_active,
         ]);
 
         if($request->board != null){
@@ -176,5 +185,20 @@ class PublicationController extends Controller
             Helper::failarMsg('custom', 'There might be an Error!');
         }
         return response()->json($res);
+    }
+
+    public function ActiveInactive($id)
+    {
+        $publication = Publication::find(decrypt($id));
+        if($publication->is_active == 1) {
+            $publication->update(['is_active' => 0]);
+            Helper::activeDeactiveMsg('deactive',$this->moduleName);
+
+        } else {
+            $publication->update(['is_active' => 1]);
+            Helper::activeDeactiveMsg('active', $this->moduleName);
+        }
+
+        return redirect(route($this->route.'.index'));
     }
 }

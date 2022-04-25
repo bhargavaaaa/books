@@ -48,6 +48,7 @@
                             <th>Publication Name</th>
                             <th>Publication Description</th>
                             <th>Publication Photo</th>
+                            <th>Status</th>
                             @if (auth()->user()->hasPermission(['edit.publications', 'activeinactive.publications', 'destroy.publications']))
                                 <th>Action</th>
                             @endif
@@ -171,6 +172,9 @@
                     },
                     {
                         data: 'publication_photo'
+                    },
+                    {
+                        data: 'is_active'
                     },
                     @if (auth()->user()->hasPermission(['edit.publications', 'activeinactive.publications', 'destroy.publications']))
                         { data: 'action',orderable:false,searchable:false},
