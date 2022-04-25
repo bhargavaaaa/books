@@ -9,7 +9,6 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Role;
-use DataTables;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
@@ -29,7 +28,7 @@ class UserController extends Controller
     {
         $users = User::with(['roles'])->select();
 
-        return DataTables::eloquent($users)
+        return datatables()->eloquent($users)
             ->addColumn('action', function ($user) {
                 $editUrl = route('users.edit', encrypt($user->id));
                 $deleteId = encrypt($user->id);
