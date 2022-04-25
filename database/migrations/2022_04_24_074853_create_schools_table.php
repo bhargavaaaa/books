@@ -17,7 +17,8 @@ class CreateSchoolsTable extends Migration
             $table->id();
             $table->string('school_name');
             $table->string('school_photo')->nullable();
-            $table->string('school_desc')->nullable();
+            $table->longText('school_desc')->nullable();
+            $table->boolean('is_active')->comment('0-in_active, 1-active')->default(0);
             $table->timestamps();
         });
     }

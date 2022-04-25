@@ -45,6 +45,7 @@ class SchoolController extends Controller
             'school_name'  => ucfirst(trim($request->name)),
             'school_desc'  => $request->description,
             'school_photo' => $fileName,
+            'is_active' => $request->is_active,
         ]);
 
         $board_id =  $request->board;
@@ -68,10 +69,8 @@ class SchoolController extends Controller
                 $editUrl = route($this->route . '.edit', encrypt($row->id));
                 $deleteId = encrypt($row->id);
 
-                $activeUrl = url('school/ActiveInactive/active/' . $row->id);
-                $deactiveUrl = url('school/ActiveInactive/deactive/' . $row->id);
-
-
+                $activeUrl = route('school.activeInactive' ,encrypt($row->id));
+                $deactiveUrl = route('school.activeInactive',encrypt($row->id));
 
                 $action = '';
                 if (auth()->user()->hasPermission('edit.schools')) {
@@ -114,7 +113,14 @@ class SchoolController extends Controller
                 return '---- No Image ----';
                 }
             })
-            ->rawColumns(['action','board_id', 'school_desc','school_photo','publication_id'])
+            ->editColumn('is_active',function($row){
+                if($row->is_active == 1){
+                    return '<span class="badge badge-success">Active</span>';
+                }else{
+                    return '<span class="badge badge-danger">In Active</span>';
+                }
+            })
+            ->rawColumns(['action','board_id', 'school_desc','school_photo','publication_id','is_active'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -163,6 +169,7 @@ class SchoolController extends Controller
             'school_name'  => ucfirst(trim($request->name)),
             'school_desc'  => $request->description,
             'school_photo' => $fileName,
+            'is_active' => $request->is_active,
         ]);
 
         if($request->board != null){
@@ -200,5 +207,19 @@ class SchoolController extends Controller
             Helper::failarMsg('custom', 'There might be an Error!');
         }
         return response()->json($res);
+    }
+
+    public function ActiveInactive($id)
+    {
+        $school = School::find(decrypt($id));
+        if($school->is_active == 1) {
+            $school->update(['is_active' => 0]);
+            Helper::activeDeactiveMsg('deactive',$this->moduleName);
+
+        } else {
+            $school->update(['is_active' => 1]);
+            Helper::activeDeactiveMsg('active', $this->moduleName);
+        }
+        return redirect(route($this->route.'.index'));
     }
 }

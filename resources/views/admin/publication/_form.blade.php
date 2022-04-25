@@ -82,6 +82,19 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-sm-6  mb-3 col-sm-12">
+                                        <label for="status">
+                                            Status <span class="requride_cls">*</span>
+                                        </label>
+                                        <div class="radio">
+                                            <label for="active"><input type="radio" name="is_active" id="active" value="1" {{ ($publication->is_active == 1) ? 'checked' : '' }}>Active</label>
+                                            <label for="inactive"><input type="radio" name="is_active" id="inactive" value="0" {{ ($publication->is_active == 0) ? 'checked' : '' }}>In Active</label>
+                                        </div>
+                                        @if ($errors->has('is_active'))
+                                            <span class="requride_cls"><strong>{{ $errors->first('is_active') }}</strong></span>
+                                        @endif
+                                    </div>
+
                                     @if (isset($publication->publication_photo))
                                         <div class="col-md-5 mb-3 col-sm-12">
                                             <label for="board">Old Image </label>

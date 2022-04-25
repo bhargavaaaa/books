@@ -49,6 +49,7 @@
                             <th>School Name</th>
                             <th>School Description</th>
                             <th>School Photo</th>
+                            <th>Status</th>
                             @if (auth()->user()->hasPermission(['edit.schools', 'activeinactive.schools', 'destroy.schools']))
                                 <th>Action</th>
                             @endif
@@ -175,6 +176,9 @@
                     },
                     {
                         data: 'school_photo'
+                    },
+                    {
+                        data: 'is_active'
                     },
                     @if (auth()->user()->hasPermission(['edit.schools', 'activeinactive.schools', 'destroy.schools']))
                         { data: 'action',orderable:false,searchable:false},
