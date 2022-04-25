@@ -169,18 +169,19 @@
                         required: true,
                         remote: {
                             type: "POST",
-                            url: '{{ route("category.checkCategoryName") }}',
+                            url: "{{ route('category.checkName') }}",
                             data: {
                                 name: function() {
-                                    return ('#name').val();
+                                    return $("#name").val();
                                 }
-                            },
+                            }
                         },
                     },
                 },
                 messages: {
                     name: {
                         required: "Name Is Required.",
+                        remote: "Category Name Is Already Exists."
                     },
                 },
                 errorPlacement: function(error, element) {

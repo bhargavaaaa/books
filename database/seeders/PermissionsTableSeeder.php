@@ -132,5 +132,28 @@ class PermissionsTableSeeder extends Seeder
         }
 
         /* permission for publication module end */
+
+
+        /* permission for category module start */
+        if (Permission::where('name', '=', 'Create Category')->first() === null) {
+            Permission::create(['name' => 'Create Category', 'slug' => 'create.category', 'description' => 'Can Add category', 'model' => 'Category',]);
+        }
+
+        if (Permission::where('name', '=', 'View Category')->first() === null) {
+            Permission::create(['name' => 'View Category', 'slug' => 'view.category', 'description' => 'Can view category', 'model' => 'Category',]);
+        }
+
+        if (Permission::where('name', '=', 'Edit Category')->first() === null) {
+            Permission::create(['name' => 'Edit Category', 'slug' => 'edit.category', 'description' => 'Can edit category', 'model' => 'Category',]);
+        }
+
+        if (Permission::where('name', '=', 'Delete Category')->first() === null) {
+            Permission::create(['name' => 'Delete Category', 'slug' => 'delete.category', 'description' => 'Can Delete category', 'model' => 'Category',]);
+        }
+        if (Permission::where('name', '=', 'Active/Inactive Category')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive Category', 'slug' => 'activeinactive.category', 'description' => 'Can Activate or deactivate categorys', 'model' => 'Category',]);
+        }
+
+        /* permission for category module end */
     }
 }

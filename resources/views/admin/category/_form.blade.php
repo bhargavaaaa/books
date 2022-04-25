@@ -35,12 +35,14 @@
                         <div class="card-body table-responsive">
                             <form action="{{ route('category.update', encrypt($category->id)) }}" method="POST"
                                 enctype="multipart/form-data" id="form">
-                                @csrf()
+                                @csrf() @method('PUT')
                                 <div class="row g-3">
                                     <div class="col-md-6 mb-3 col-sm-12">
                                         <label class="form-label">Name <span class="requride_cls">*</span></label>
                                         <input type="text" class="form-control" name="name" id="name" placeholder="Name"
                                             value="{{ old('name', $category->category_name) }}" />
+                                        <input type="hidden" id="id" name="id" value="{{ $category->id }}" />
+
                                         @error('name')
                                             <span class="error">
                                                 <strong>{{ $message }}</strong>
@@ -51,7 +53,8 @@
                                     <div class="col-md-6 mb-3 col-sm-12">
                                         <label for="board">Board </label>
                                         <td>
-                                            <select class="select2 select2bs4 form-control" id="board" name="board[]" multiple>
+                                            <select class="select2 select2bs4 form-control" id="board" name="board[]"
+                                                multiple>
                                                 @foreach ($boards as $board)
                                                     <option value="{{ $board->id }}"
                                                         @if (in_array($board->id, $board_ids)) selected @else null @endif>
@@ -70,11 +73,12 @@
                                     <div class="col-md-6 mb-3 col-sm-12">
                                         <label for="publication">Publication</label>
                                         <td>
-                                            <select class="select2 select2bs4 form-control" id="publication" name="publication[]"
-                                                multiple>
+                                            <select class="select2 select2bs4 form-control" id="publication"
+                                                name="publication[]" multiple>
                                                 @foreach ($publications as $publication)
                                                     <option value="{{ $publication->id }}"
-                                                        @if (in_array($publication->id, $publication_ids)) selected @else null @endif>{{ $publication->publication_name }}</option>
+                                                        @if (in_array($publication->id, $publication_ids)) selected @else null @endif>
+                                                        {{ $publication->publication_name }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
@@ -91,7 +95,8 @@
                                                 multiple>
                                                 @foreach ($schools as $school)
                                                     <option value="{{ $school->id }}"
-                                                        @if (in_array($school->id, $school_ids)) selected @else null @endif>{{ $school->school_name }}</option>
+                                                        @if (in_array($school->id, $school_ids)) selected @else null @endif>
+                                                        {{ $school->school_name }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
@@ -161,11 +166,11 @@
 
 @section('script')
     <script>
-            function removeImg(e) {
-                $('#imgView').attr('src','').hide(100);
-                $('#old_image').val('');
-                $('#removeImg').hide(100);
-            }
+        function removeImg(e) {
+            $('#imgView').attr('src', '').hide(100);
+            $('#old_image').val('');
+            $('#removeImg').hide(100);
+        }
         jQuery(document).ready(function() {
 
             $("#form").submit(function(e) {
@@ -188,18 +193,25 @@
                 rules: {
                     name: {
                         required: true,
+                        remote: {
+                            type: "POST",
+                            url : "{{ route('category.checkName') }}",
+                            data: {
+                                name: function(){
+                                    return $("#name").val();
+                                },
+                                id:function(){
+                                    return $("#id").val();
+                                }
+                            },
+                        },
                     },
-                    // 'board[]': {
-                    //     required: true,
-                    // },
                 },
                 messages: {
                     name: {
                         required: "Name Is Required.",
+                        remote: "Category Name Is Already Exists."
                     },
-                    // 'board[]': {
-                    //     required: "Select board.",
-                    // },
                 },
                 errorPlacement: function(error, element) {
                     error.css('color', 'red').appendTo(element.parent("div"));

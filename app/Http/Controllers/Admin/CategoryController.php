@@ -161,53 +161,61 @@ class CategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $category = Category::with(['board','publication','school'])->find(decrypt($id));
-
-        $fileName = Null;
-        if ($file = $request->file('image')) {
-            if($request->old_image != null||$request->old_image != ''){
-                try {
-                unlink(storage_path('/app/category/'.$request->old_image));
-            } catch (\Throwable $th) {}
-            }
-                $image = $request->file('image');
-                $fileName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move('storage/app/category/', $fileName);
-        }else{
-            if($request->old_image == null||$request->old_image == ''){
-                try {
-                unlink(storage_path('/app/category/'.$category->category_image));
-            } catch (\Throwable $th) {}
-            }
-            $fileName = $request->old_image;
-        }
-
-
-        $category->update([
-            'category_name'        => $request->name,
-            'category_description' => $request->description,
-            'category_image'       => $fileName,
+        $validate = $request->validate([
+            'name'  => 'required|unique:categories,category_name,'. $request->id,
+            'image'       => 'mimes:jpeg,jpg,png',
         ]);
 
-        if($request->board != null){
-            $board_id =  $request->board;
-            $category->board()->sync($board_id);
-        }else{
-            $category->board()->sync([]);
-        }
+        if($validate) {
 
-        if($request->publication != null){
-            $publication_id =  $request->publication;
-            $category->publication()->sync($publication_id);
-        }else{
-            $category->publication()->sync([]);
-        }
+            $category = Category::with(['board','publication','school'])->find(decrypt($id));
 
-        if($request->school != null){
-            $school_id =  $request->publication;
-            $category->school()->sync($school_id);
-        }else{
-            $category->school()->sync([]);
+            $fileName = Null;
+            if ($file = $request->file('image')) {
+                if($request->old_image != null||$request->old_image != ''){
+                    try {
+                    unlink(storage_path('/app/category/'.$request->old_image));
+                } catch (\Throwable $th) {}
+                }
+                    $image = $request->file('image');
+                    $fileName = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move('storage/app/category/', $fileName);
+            }else{
+                if($request->old_image == null||$request->old_image == ''){
+                    try {
+                    unlink(storage_path('/app/category/'.$category->category_image));
+                } catch (\Throwable $th) {}
+                }
+                $fileName = $request->old_image;
+            }
+
+
+            $category->update([
+                'category_name'        => $request->name,
+                'category_description' => $request->description,
+                'category_image'       => $fileName,
+            ]);
+
+            if($request->board != null){
+                $board_id =  $request->board;
+                $category->board()->sync($board_id);
+            }else{
+                $category->board()->sync([]);
+            }
+
+            if($request->publication != null){
+                $publication_id =  $request->publication;
+                $category->publication()->sync($publication_id);
+            }else{
+                $category->publication()->sync([]);
+            }
+
+            if($request->school != null){
+                $school_id =  $request->school;
+                $category->school()->sync($school_id);
+            }else{
+                $category->school()->sync([]);
+            }
         }
 
         Helper::successMsg('update', $this->moduleName);
@@ -250,7 +258,7 @@ class CategoryController extends Controller
         return redirect($this->route);
     }
 
-    public function checkCategoryName(Request $request)
+    public function checkName(Request $request)
     {
         if(!isset($request->id)) {
             $category = Category::where('category_name', $request->name)->count();
