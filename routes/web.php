@@ -95,7 +95,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/edit/{id}', [PublicationController::class,'edit'])->name('publication.edit');
     Route::post('/update/{id}', [PublicationController::class,'update'])->name('publication.update');
     Route::post('/delete', [PublicationController::class,'delete'])->name('publication.delete');
-    Route::get('/ActiveInactive/{type}/{id}',[PublicationController::class,'ActiveInactive'])->name('publication.activeInactive');
+    Route::get('/ActiveInactive/{id}',[PublicationController::class,'ActiveInactive'])->name('publication.activeInactive');
     });
 
     Route::prefix('school')->group(function () {
@@ -106,6 +106,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/edit/{id}', [SchoolController::class,'edit'])->name('school.edit');
     Route::post('/update/{id}', [SchoolController::class,'update'])->name('school.update');
     Route::post('/delete', [SchoolController::class,'delete'])->name('school.delete');
-    Route::get('/ActiveInactive/{type}/{id}',[SchoolController::class,'ActiveInactive'])->name('school.activeInactive');
+    Route::get('/ActiveInactive/{id}',[SchoolController::class,'ActiveInactive'])->name('school.activeInactive');
     });
 });
