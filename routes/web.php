@@ -4,6 +4,7 @@ use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\Admin\BoardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -130,7 +131,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('getCancelledOrdersData', [OrdersController::class, 'getCancelledOrdersData'])->name('orders.getCancelledOrdersData');
         Route::post('getRejectedOrdersData', [OrdersController::class, 'getRejectedOrdersData'])->name('orders.getRejectedOrdersData');
         Route::get('show/{id}', [OrdersController::class, 'show'])->name('orders.show');
-        Route::post('state/change/{id}', [OrdersController::class, 'show'])->name('orders.state.change');
+        Route::post('state/change', [OrdersController::class, 'stateChange'])->name('orders.state.change');
     });
 
     Route::group(['prefix' => 'category'], function(){

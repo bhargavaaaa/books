@@ -49,7 +49,6 @@
                             </thead>
                             <tbody>
                             </tbody>
-                            </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Sr. No.</th>
