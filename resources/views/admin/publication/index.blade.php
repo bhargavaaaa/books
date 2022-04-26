@@ -185,5 +185,43 @@
             });
 
         });
+
+        $(document).on('click', '#activate', function(e) {
+            e.preventDefault();
+            var linkURL = $(this).attr("href");
+            console.log(linkURL);
+            Swal.fire({
+                title: 'Are you sure want to Activate?',
+                text: "As that can be undone by doing reverse.",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = linkURL;
+                }
+            });
+        });
+
+        $(document).on('click', '#deactivate', function(e) {
+            e.preventDefault();
+            var linkURL = $(this).attr("href");
+            console.log(linkURL);
+            Swal.fire({
+                title: 'Are you sure want to De-Activate?',
+                text: "As that can be undone by doing reverse.",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = linkURL;
+                }
+            });
+        });
     </script>
 @endsection
