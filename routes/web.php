@@ -113,15 +113,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     });
 
     Route::prefix('product')->group(function () {
-        Route::get('/', [ProductController::class, 'index'])->name('product.index');
-        Route::get('/getData', [ProductController::class, 'getData'])->name('product.getData');
-        Route::get('/create', [ProductController::class, 'create'])->name('product.create');
+        Route::get('/', [ProductController::class, 'index'])->name('product.index')->middleware("permission:view.products");
+        Route::get('/getData', [ProductController::class, 'getData'])->name('product.getData')->middleware("permission:view.products");
+        Route::get('/create', [ProductController::class, 'create'])->name('product.create')->middleware("permission:create.products");
         Route::post('/store', [ProductController::class, 'store'])->name('product.store');
-        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit')->middleware("permission:edit.products");
         Route::post('/update/{id}', [ProductController::class, 'update'])->name('product.update');
-        Route::post('/delete', [ProductController::class, 'delete'])->name('product.delete');
+        Route::post('/delete', [ProductController::class, 'delete'])->name('product.delete')->middleware("permission:delete.products");
         Route::post('/checkName', [ProductController::class, 'checkName'])->name('product.checkName');
-        Route::get('/ActiveInactive/{id}', [ProductController::class, 'ActiveInactive'])->name('product.activeInactive');
+        Route::get('/ActiveInactive/{id}', [ProductController::class, 'ActiveInactive'])->name('product.activeInactive')->middleware("permission:activeinactive.products");
     });
 
     Route::prefix('orders')->group(function () {
