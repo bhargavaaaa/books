@@ -45,7 +45,7 @@ class BoardController extends Controller
             return $action;
         })
         ->editColumn('description', function($row){
-            return $row->description;
+            return substr($row->description,0,100);
         })
         ->editColumn('image', function($row){
             if($row->image != null) {

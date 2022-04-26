@@ -69,7 +69,7 @@ class CategoryController extends Controller
             return $school_id;
         })
         ->editColumn('category_description', function($row){
-            return $row->category_description;
+            return substr($row->category_description,0,100);
         })
         ->editColumn('category_image', function($row){
             if($row->category_image != null) {
