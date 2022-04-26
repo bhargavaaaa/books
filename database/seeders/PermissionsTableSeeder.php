@@ -109,6 +109,9 @@ class PermissionsTableSeeder extends Seeder
             Permission::create(['name' => 'Delete Board', 'slug' => 'delete.board', 'description' => 'Can Delete board', 'model' => 'Board',]);
         }
 
+        if (Permission::where('name', '=', 'Active/Inactive Board')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive board', 'slug' => 'activeinactive.board', 'description' => 'Can Activate or deactivate board', 'model' => 'Board',]);
+        }
         /* permission for board module end */
 
         /* permission for school module start */
