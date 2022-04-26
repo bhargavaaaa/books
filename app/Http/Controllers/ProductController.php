@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Helper;
 use App\Http\Requests\SchoolRequest;
 use App\Models\Board;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Publication;
 use App\Models\School;
@@ -31,11 +32,9 @@ class ProductController extends Controller
         $moduleName = $this->moduleName;
         $boards = Board::get();
         $publications = Publication::get();
-        $schools = School::Active()->get();
-        dd($schools);
-        // $categories = Category::get();
-        $categories = array();
-        return view($this->view . '/form', compact('moduleName', 'boards','publications'));
+        $schools = School::where('is_active',1)->get();
+        $categories = Category::where('is_active',1)->get();
+        return view($this->view . '/form', compact('moduleName', 'boards','schools','publications','categories'));
     }
     public function store(SchoolRequest $request)
     {
@@ -44,11 +43,21 @@ class ProductController extends Controller
             $fileName = time() .".".$file->getClientOriginalExtension();
             $file->storeAs('product/',$fileName);
         }
+        $attr = array();
+        $attribute_name = $request->attribute_name;
+        $attribute_value = $request->attribute_value;
+        for($i=0;$i<count($request->attribute_name);$i++){
+            $attr[$attribute_name[$i]] = $attribute_value[$i];
+        }
 
         $product = Product::create([
             'product_name'  => ucfirst(trim($request->name)),
+            'sku'  => str_slug($request->name),
             'product_desc'  => $request->description,
             'product_photo' => $fileName,
+            'cutout_price' => $request->cutout_price,
+            'attributes' => json_encode($attr),
+            'sale_price' => $request->sale_price,
             'is_active' => $request->is_active,
         ]);
 
@@ -57,6 +66,12 @@ class ProductController extends Controller
 
         $publication_id =  $request->publication;
         $product->publication()->attach($publication_id);
+
+        $school_id =  $request->school;
+        $product->school()->attach($school_id);
+
+        $category_id =  $request->category;
+        $product->category()->attach($category_id);
 
         Helper::successMsg('insert', $this->moduleName);
 
@@ -100,6 +115,20 @@ class ProductController extends Controller
                 }
                 return $board_id;
             })
+            ->editColumn('category_id',function($row){
+                $category_id = array();
+                foreach($row->category as $category){
+                    array_push($category_id,$category->category_name);
+                }
+                return $category_id;
+            })
+            ->editColumn('school_id',function($row){
+                $school_id = array();
+                foreach($row->school as $school){
+                    array_push($school_id,$school->school_name);
+                }
+                return $school_id;
+            })
             ->editColumn('publication_id',function($row){
                 $publication_id = array();
                 foreach($row->publication as $publication){
@@ -134,21 +163,37 @@ class ProductController extends Controller
         $moduleName = $this->moduleName;
         $boards = Board::get();
         $publications = Publication::get();
-        $school = Product::with(['board','publication'])->find(decrypt($id));
+        $product = Product::with(['board','publication','school','category'])->find(decrypt($id));
+
+        $schools = School::where('is_active',1)->get();
+        $categories = Category::where('is_active',1)->get();
+
         $board_ids = array();
-        foreach($school->board as $board){
+        foreach($product->board as $board){
         array_push($board_ids,$board->id);
         }
+
         $publication_ids = array();
-        foreach($school->publication as $publication){
+        foreach($product->publication as $publication){
         array_push($publication_ids,$publication->id);
         }
-        return view($this->view . '/_form', compact('moduleName', 'boards','publications','school','board_ids','publication_ids'));
+
+        $school_ids = array();
+        foreach($product->school as $school){
+        array_push($school_ids,$school->id);
+        }
+
+        $category_ids = array();
+        foreach($product->category as $category){
+        array_push($category_ids,$category->id);
+        }
+        $attr = json_decode($product->attributes,true);
+        return view($this->view . '/_form', compact('moduleName','product','attr', 'boards','publications','schools','categories','board_ids','publication_ids','school_ids','category_ids'));
     }
 
     public function update(SchoolRequest $request,$id)
     {
-        $school = Product::with('board')->where('id',decrypt($id))->first();
+        $product = Product::with('board')->where('id',decrypt($id))->first();
 
         $fileName = Null;
         if ($file = $request->file('image')) {
@@ -162,33 +207,59 @@ class ProductController extends Controller
         }else{
             if($request->old_image == null||$request->old_image == ''){
                 try {
-                unlink(storage_path('/app/product/'.$school->product_photo));
+                unlink(storage_path('/app/product/'.$product->product_photo));
             } catch (\Throwable $th) {}
             }
             $fileName = $request->old_image;
         }
 
+        $attr = array();
+        $attribute_name = $request->attribute_name;
+        $attribute_value = $request->attribute_value;
+        for($i=0;$i<count($request->attribute_name);$i++){
+            $attr[$attribute_name[$i]] = $attribute_value[$i];
+        }
 
-        $school->update([
+
+        $product->update([
             'product_name'  => ucfirst(trim($request->name)),
+            'sku'  => str_slug($request->name),
             'product_desc'  => $request->description,
             'product_photo' => $fileName,
+            'cutout_price' => $request->cutout_price,
+            'attributes' => json_encode($attr),
+            'sale_price' => $request->sale_price,
             'is_active' => $request->is_active,
         ]);
 
         if($request->board != null){
             $board_id =  $request->board;
-            $school->board()->sync($board_id);
+            $product->board()->sync($board_id);
         }else{
-            $school->board()->sync([]);
+            $product->board()->sync([]);
         }
 
         if($request->publication != null){
             $publication_id =  $request->publication;
-            $school->publication()->sync($publication_id);
+            $product->publication()->sync($publication_id);
         }else{
-            $school->publication()->sync([]);
+            $product->publication()->sync([]);
         }
+
+        if($request->school != null){
+            $school_id =  $request->school;
+            $product->school()->sync($school_id);
+        }else{
+            $product->school()->sync([]);
+        }
+
+        if($request->category != null){
+            $category_id =  $request->category;
+            $product->category()->attach($category_id);
+        }else{
+            $product->category()->sync([]);
+        }
+
 
         Helper::successMsg('update', $this->moduleName);
 
@@ -225,5 +296,17 @@ class ProductController extends Controller
             Helper::activeDeactiveMsg('active', $this->moduleName);
         }
         return redirect(route($this->route.'.index'));
+    }
+    public function checkName(Request $request){
+        if(!isset($request->id)){
+            $product = Product::where('product_name','=',$request->name)->count();
+        }else{
+           $product = Product::where('product_name','=',$request->name)->where('id','!=',$request->id)->count();
+        }
+        if($product > 0){
+            echo json_encode(false);
+        }else{
+            echo json_encode(true);
+        }
     }
 }

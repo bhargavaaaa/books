@@ -46,9 +46,13 @@
                             <th width="10%">Sr No.</th>
                             <th>Boards</th>
                             <th>Publications</th>
-                            <th>School Name</th>
-                            <th>School Description</th>
-                            <th>School Photo</th>
+                            <th>Category</th>
+                            <th>School</th>
+                            <th>Product Name</th>
+                            <th>Product Description</th>
+                            <th>Product Photo</th>
+                            <th>Cutout Price</th>
+                            <th>Sale Price</th>
                             <th>Status</th>
                             @if (auth()->user()->hasPermission(['edit.products', 'activeinactive.products', 'destroy.products']))
                                 <th>Action</th>
@@ -163,19 +167,39 @@
                         searchable: false
                     },
                     {
-                        data: 'board_id'
+                        data: 'board_id',
+                        orderable: false,
+                        searchable: false
                     },
                     {
-                        data: 'publication_id'
+                        data: 'publication_id',
+                        orderable: false,
+                        searchable: false
                     },
                     {
-                        data: 'school_name'
+                        data: 'category_id',
+                        orderable: false,
+                        searchable: false
                     },
                     {
-                        data: 'school_desc'
+                        data: 'school_id',
+                        orderable: false,
+                        searchable: false
                     },
                     {
-                        data: 'school_photo'
+                        data: 'product_name'
+                    },
+                    {
+                        data: 'product_desc'
+                    },
+                    {
+                        data: 'product_photo'
+                    },
+                    {
+                        data: 'cutout_price'
+                    },
+                    {
+                        data: 'sale_price'
                     },
                     {
                         data: 'is_active'

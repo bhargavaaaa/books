@@ -119,6 +119,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
         Route::post('/update/{id}', [ProductController::class, 'update'])->name('product.update');
         Route::post('/delete', [ProductController::class, 'delete'])->name('product.delete');
+        Route::post('/checkName', [ProductController::class, 'checkName'])->name('product.checkName');
         Route::get('/ActiveInactive/{id}', [ProductController::class, 'ActiveInactive'])->name('product.activeInactive');
     });
 

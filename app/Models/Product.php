@@ -8,22 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $gaurded = [];
+    protected $guarded = [];
 
     public function publication(){
-        return $this->belongsTo(Publication::class,'product_publications')->withTimestamps();
+        return $this->belongsToMany(Publication::class,'product_publications');//->withTimestamps();
     }
 
     public function school(){
-        return $this->belongsToMany(School::class,'product_schools')->withTimestamps();
+        return $this->belongsToMany(School::class,'product_schools');//->withTimestamps();
     }
 
-    // public function category(){
-    //     return $this->belongsToMany(Category::class,'category_products')->withTimestamps();
-    // }
+    public function category(){
+        return $this->belongsToMany(Category::class,'category_products');//->withTimestamps();
+    }
 
     public function board(){
-        return $this->belongsToMany(Board::class,'board_products')->withTimestamps();
+        return $this->belongsToMany(Board::class,'board_products');//->withTimestamps();
     }
 
 }
