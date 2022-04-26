@@ -104,7 +104,7 @@ class SchoolController extends Controller
                 return $publication_id;
             })
             ->editColumn('school_desc',function($row){
-                return $row->school_desc;
+                return substr($row->school_desc,0,100);
             })
             ->editColumn('school_photo',function($row){
                 if($row->school_photo != null){

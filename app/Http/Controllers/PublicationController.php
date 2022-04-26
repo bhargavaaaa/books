@@ -58,7 +58,7 @@ class PublicationController extends Controller
 
     public function getData(Request $request)
     {
-        $data = Publication::with(['board'])->select();
+        $data = Publication::select();
 
         return DataTables::eloquent($data)
             ->addColumn('action', function ($row) {
@@ -95,7 +95,7 @@ class PublicationController extends Controller
                 return $board_id;
             })
             ->editColumn('publication_desc',function($row){
-                return $row->publication_desc;
+                return substr($row->publication_desc,0,100);
             })
             ->editColumn('is_active',function($row){
                 if($row->is_active == 1){

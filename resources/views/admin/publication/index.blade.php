@@ -162,7 +162,9 @@
                         searchable: false
                     },
                     {
-                        data: 'board_id'
+                        data: 'board_id',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'publication_name'

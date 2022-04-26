@@ -87,13 +87,19 @@
                 searchable: false
             },
             {
-                data: 'board_id'
+                data: 'board_id',
+                orderable: false,
+                searchable: false
             },
             {
-                data: 'publication_id'
+                data: 'publication_id',
+                orderable: false,
+                searchable: false
             },
             {
-                data: 'school_id'
+                data: 'school_id',
+                orderable: false,
+                searchable: false
             },
             {
                 data: 'category_name'

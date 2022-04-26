@@ -135,7 +135,7 @@
                                     <div class="col-md-12 mb-3 col-sm-12">
                                         <label for="description">Description</label>
                                         <textarea class="ckeditor form-control description" name="description"
-                                            id="description">{!! $category->category_id !!}</textarea>
+                                            id="description">{!! $category->category_description !!}</textarea>
 
                                         <span id='ckdescription' class="error"></span>
                                         @error('description')
