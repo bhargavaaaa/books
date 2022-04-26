@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderHistory;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
 {
-    public $moduleName = "Board";
+    public $moduleName = "Orders";
     public $route = "admin/orders";
     public $view = "admin/orders";
 
@@ -29,17 +30,34 @@ class OrdersController extends Controller
                 return "<a href=\"{$show}\"><b>{$order->order_no}</b></a>";
             })
             ->editColumn('order_state',function($order){
-                return "<select class=\"order_state form-control\">
-                    <option value=\"\">Received</option>
+                return "<select class=\"order_state form-control\" data-id=\"".encrypt($order->id)."\">
+                    <option value=\"NAN\">Received</option>
                     <option value=\"1\">Shipped</option>
                     <option value=\"4\">Rejected</option>
                 </select>";
+            })
+            ->editColumn('order_item_ids',function($order) {
+                $items = Product::whereIn('id', json_decode($order->order_item_ids, true))->pluck('product_name')->toArray();
+                return substr(implode(", ", $items), 0, 100).'...';
+            })
+            ->editColumn('order_item_quantities',function($order) {
+                $items = json_decode($order->order_item_quantities, true);
+                return array_sum($items);
+            })
+            ->editColumn('main_total',function($order) {
+                return "₹ ".$order->main_total;
+            })
+            ->editColumn('payment_method',function($order) {
+                return ucfirst($order->payment_method);
+            })
+            ->editColumn('created_at',function($order) {
+                return date('d-M-Y', strtotime($order->created_at));
             })
             ->addColumn('action',function($order){
                 $showUrl = route('orders.show', [encrypt($order->id)]);
                 return "<a href='" . $showUrl . "' class='btn btn-primary btn-xs'><i class='fa fa-eye'></i> View Order</a>";
             })
-            ->rawColumns(['action', 'order_no', 'order_state'])
+            ->rawColumns(['action', 'order_no', 'order_state', 'order_item_ids', 'order_item_quantities', 'main_total', 'created_at'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -54,17 +72,34 @@ class OrdersController extends Controller
                 return "<a href=\"{$show}\"><b>{$order->order_no}</b></a>";
             })
             ->editColumn('order_state',function($order){
-                return "<select class=\"order_state form-control\">
-                    <option value=\"\">Shipped</option>
+                return "<select class=\"order_state form-control\" data-id=\"".encrypt($order->id)."\">
+                    <option value=\"NAN\">Shipped</option>
                     <option value=\"2\">Delivered</option>
                     <option value=\"4\">Rejected</option>
                 </select>";
+            })
+            ->editColumn('order_item_ids',function($order) {
+                $items = Product::whereIn('id', json_decode($order->order_item_ids, true))->pluck('product_name')->toArray();
+                return substr(implode(", ", $items), 0, 100).'...';
+            })
+            ->editColumn('order_item_quantities',function($order) {
+                $items = json_decode($order->order_item_quantities, true);
+                return array_sum($items);
+            })
+            ->editColumn('main_total',function($order) {
+                return "₹ ".$order->main_total;
+            })
+            ->editColumn('payment_method',function($order) {
+                return ucfirst($order->payment_method);
+            })
+            ->editColumn('created_at',function($order) {
+                return date('d-M-Y', strtotime($order->created_at));
             })
             ->addColumn('action',function($order){
                 $showUrl = route('orders.show', [encrypt($order->id)]);
                 return "<a href='" . $showUrl . "' class='btn btn-primary btn-xs'><i class='fa fa-eye'></i> View Order</a>";
             })
-            ->rawColumns(['action', 'order_no', 'order_state'])
+            ->rawColumns(['action', 'order_no', 'order_state', 'order_item_ids', 'order_item_quantities', 'main_total', 'created_at'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -79,15 +114,32 @@ class OrdersController extends Controller
                 return "<a href=\"{$show}\"><b>{$order->order_no}</b></a>";
             })
             ->editColumn('order_state',function($order){
-                return "<select class=\"order_state form-control\">
-                    <option value=\"\">Delivered</option>
+                return "<select class=\"order_state form-control\" data-id=\"".encrypt($order->id)."\">
+                    <option value=\"NAN\">Delivered</option>
                 </select>";
+            })
+            ->editColumn('order_item_ids',function($order) {
+                $items = Product::whereIn('id', json_decode($order->order_item_ids, true))->pluck('product_name')->toArray();
+                return substr(implode(", ", $items), 0, 100).'...';
+            })
+            ->editColumn('order_item_quantities',function($order) {
+                $items = json_decode($order->order_item_quantities, true);
+                return array_sum($items);
+            })
+            ->editColumn('main_total',function($order) {
+                return "₹ ".$order->main_total;
+            })
+            ->editColumn('payment_method',function($order) {
+                return ucfirst($order->payment_method);
+            })
+            ->editColumn('created_at',function($order) {
+                return date('d-M-Y', strtotime($order->created_at));
             })
             ->addColumn('action',function($order){
                 $showUrl = route('orders.show', [encrypt($order->id)]);
                 return "<a href='" . $showUrl . "' class='btn btn-primary btn-xs'><i class='fa fa-eye'></i> View Order</a>";
             })
-            ->rawColumns(['action', 'order_no', 'order_state'])
+            ->rawColumns(['action', 'order_no', 'order_state', 'order_item_ids', 'order_item_quantities', 'main_total', 'created_at'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -102,15 +154,32 @@ class OrdersController extends Controller
                 return "<a href=\"{$show}\"><b>{$order->order_no}</b></a>";
             })
             ->editColumn('order_state',function($order){
-                return "<select class=\"order_state form-control\">
-                    <option value=\"\">Cancelled</option>
+                return "<select class=\"order_state form-control\" data-id=\"".encrypt($order->id)."\">
+                    <option value=\"NAN\">Cancelled</option>
                 </select>";
+            })
+            ->editColumn('order_item_ids',function($order) {
+                $items = Product::whereIn('id', json_decode($order->order_item_ids, true))->pluck('product_name')->toArray();
+                return substr(implode(", ", $items), 0, 100).'...';
+            })
+            ->editColumn('order_item_quantities',function($order) {
+                $items = json_decode($order->order_item_quantities, true);
+                return array_sum($items);
+            })
+            ->editColumn('main_total',function($order) {
+                return "₹ ".$order->main_total;
+            })
+            ->editColumn('payment_method',function($order) {
+                return ucfirst($order->payment_method);
+            })
+            ->editColumn('created_at',function($order) {
+                return date('d-M-Y', strtotime($order->created_at));
             })
             ->addColumn('action',function($order){
                 $showUrl = route('orders.show', [encrypt($order->id)]);
                 return "<a href='" . $showUrl . "' class='btn btn-primary btn-xs'><i class='fa fa-eye'></i> View Order</a>";
             })
-            ->rawColumns(['action', 'order_no', 'order_state'])
+            ->rawColumns(['action', 'order_no', 'order_state', 'order_item_ids', 'order_item_quantities', 'main_total', 'created_at'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -125,15 +194,32 @@ class OrdersController extends Controller
                 return "<a href=\"{$show}\"><b>{$order->order_no}</b></a>";
             })
             ->editColumn('order_state',function($order){
-                return "<select class=\"order_state form-control\">
-                    <option value=\"\">Rejected</option>
+                return "<select class=\"order_state form-control\" data-id=\"".encrypt($order->id)."\">
+                    <option value=\"NAN\">Rejected</option>
                 </select>";
+            })
+            ->editColumn('order_item_ids',function($order) {
+                $items = Product::whereIn('id', json_decode($order->order_item_ids, true))->pluck('product_name')->toArray();
+                return substr(implode(", ", $items), 0, 100).'...';
+            })
+            ->editColumn('order_item_quantities',function($order) {
+                $items = json_decode($order->order_item_quantities, true);
+                return array_sum($items);
+            })
+            ->editColumn('main_total',function($order) {
+                return "₹ ".$order->main_total;
+            })
+            ->editColumn('payment_method',function($order) {
+                return ucfirst($order->payment_method);
+            })
+            ->editColumn('created_at',function($order) {
+                return date('d-M-Y', strtotime($order->created_at));
             })
             ->addColumn('action',function($order){
                 $showUrl = route('orders.show', [encrypt($order->id)]);
                 return "<a href='" . $showUrl . "' class='btn btn-primary btn-xs'><i class='fa fa-eye'></i> View Order</a>";
             })
-            ->rawColumns(['action', 'order_no', 'order_state'])
+            ->rawColumns(['action', 'order_no', 'order_state', 'order_item_ids', 'order_item_quantities', 'main_total', 'created_at'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -147,9 +233,9 @@ class OrdersController extends Controller
         return view($this->view.'/show', compact('order', 'moduleName'));
     }
 
-    public function stateChange(Request $request, $id)
+    public function stateChange(Request $request)
     {
-        $id = decrypt($id);
+        $id = decrypt($request->id);
 
         $order = Order::find($id);
         $order->order_state = $request->state;
@@ -172,6 +258,6 @@ class OrdersController extends Controller
             "note" => "Order ".$note
         ]);
 
-        return redirect($this->route);
+        return response()->json(["status" => true], 200);
     }
 }
