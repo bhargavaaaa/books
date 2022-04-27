@@ -228,9 +228,10 @@ class OrdersController extends Controller
     {
         $id = decrypt($id);
 
-        $order = Order::find($id);
+        $order = Order::with(['user'])->find($id);
+        $products = Product::whereIn('id', json_decode($order->order_item_ids, true))->pluck('product_name')->toArray();
         $moduleName = $this->moduleName;
-        return view($this->view.'/show', compact('order', 'moduleName'));
+        return view($this->view.'/show', compact('order', 'moduleName','products'));
     }
 
     public function stateChange(Request $request)
@@ -244,13 +245,13 @@ class OrdersController extends Controller
         if($request->state == 0) {
             $note = " is Received.";
         } elseif ($request->state == 1) {
-            $note = " is Shipped."; 
+            $note = " is Shipped.";
         } elseif ($request->state == 2) {
-            $note = " has been Delivered."; 
+            $note = " has been Delivered.";
         } elseif ($request->state == 3) {
-            $note = " has been Cancelled."; 
+            $note = " has been Cancelled.";
         } elseif ($request->state == 4) {
-            $note = " has been Rejected."; 
+            $note = " has been Rejected.";
         }
 
         OrderHistory::create([
