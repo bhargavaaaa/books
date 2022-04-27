@@ -4,6 +4,8 @@ use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\Admin\BoardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CMSPageController;
+use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
@@ -145,5 +147,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/delete/{id}',[CategoryController::class, 'delete'])->name('category.delete')->middleware("permission:delete.category");
         Route::post('/checkName',[CategoryController::class, 'checkName'])->name('category.checkName');
         Route::get('/categoryActiveInactive/{id}',[CategoryController::class, 'categoryActiveInactive'])->name('category.activeInactive')->middleware("permission:activeinactive.category");
+    });
+
+    /* Routes For ContactUs */
+    Route::get('contact_us',[ContactUsController::class, 'index'])->name('contact_us.index');
+    Route::get('/getContactUsData',[ContactUsController::class, 'getContactUsData'])->name('contact_us.getContactUsData');
+
+    /* Routes Fro CMS Pages */
+    Route::group(['prefix' => 'cms_page'], function() {
+        Route::get('/', [CMSPageController::class, 'index'])->name('cms_page.index');
+        Route::get('/getCmsPageData', [CMSPageController::class, 'getCmsPageData'])->name('cms_page.getCmsPageData');
+        Route::get('/create', [CMSPageController::class, 'create'])->name('cms_page.create');
+        Route::post('/store', [CMSPageController::class, 'store'])->name('cms_page.store');
+        Route::get('/edit/{id}', [CMSPageController::class, 'edit'])->name('cms_page.edit');
+        Route::put('/{id}', [CMSPageController::class, 'update'])->name('cms_page.update');
+        Route::get('/delete/{id}', [CMSPageController::class, 'delete'])->name('cms_page.delete');
     });
 });
