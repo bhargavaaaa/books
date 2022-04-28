@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CMSPageController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\OrdersController;
+use App\Http\Controllers\Admin\StandardController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -112,6 +113,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('/update/{id}', [SchoolController::class, 'update'])->name('school.update')->middleware("permission:edit.schools");
         Route::post('/delete', [SchoolController::class, 'delete'])->name('school.delete')->middleware("permission:delete.schools");
         Route::get('/ActiveInactive/{id}', [SchoolController::class, 'ActiveInactive'])->name('school.activeInactive')->middleware("permission:activeinactive.schools");
+    });
+
+    Route::prefix('standard')->group(function () {
+        Route::get('/', [StandardController::class, 'index'])->name('standard.index');
+        Route::get('/getStandardData', [StandardController::class, 'getStandardData'])->name('standard.getStandardData');
+        Route::get('/create', [StandardController::class, 'create'])->name('standard.create');
+        Route::post('/store', [StandardController::class, 'store'])->name('standard.store');
+        Route::get('/edit/{id}', [StandardController::class,'edit'])->name('standard.edit');
+        Route::put('/{id}', [StandardController::class, 'update'])->name('standard.update');
+        Route::get('/delete/{id}',[StandardController::class, 'delete'])->name('standard.delete');
+        Route::get('/standardActiveInactive/{id}',[StandardController::class, 'standardActiveInactive'])->name('standard.activeInactive');
     });
 
     Route::prefix('product')->group(function () {
