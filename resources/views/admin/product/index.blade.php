@@ -48,6 +48,7 @@
                             <th>Publications</th>
                             <th>Category</th>
                             <th>School</th>
+                            <th>Standard</th>
                             <th>Product Name</th>
                             <th>Product Description</th>
                             <th>Product Photo</th>
@@ -183,6 +184,11 @@
                     },
                     {
                         data: 'school_id',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'standard_id',
                         orderable: false,
                         searchable: false
                     },

@@ -104,6 +104,25 @@
                                             </span>
                                         @enderror
                                     </div>
+
+                                    <div class="col-md-6 mb-3 col-sm-12">
+                                        <label for="school">Standard </label>
+                                        <td>
+                                            <select class="select2 select2bs4 form-control" id="standard" name="standard[]"
+                                                multiple>
+                                                @foreach ($standards as $standard)
+                                                    <option value="{{ $standard->id }}"
+                                                        @if (in_array($standard->id, $standard_ids)) selected @else null @endif>
+                                                        {{ $standard->standard_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        @error('standard')
+                                            <span class="error">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
                                 </div>
 
                                 <div class="row g-3">
@@ -247,6 +266,36 @@
 
                                         </table>
                                     </div>
+
+                                    <div class="col-md-6 mb-3 col-sm-12">
+                                        <label for="can_return">
+                                            Can Return  <span class="requride_cls">*</span>
+                                        </label>
+                                        <div class="radio">
+                                            <label for="can_not_return"><input type="radio" name="can_return" id="can_not_return" value="0" {{ ($product->can_return == 0) ? 'checked' : ''}}>Can Not Return</label>
+                                            <label for="can_return"><input type="radio" name="can_return" id="can_return" value="1" {{ ($product->can_return == 1) ? 'checked' : ''}}>Can Return</label>
+                                        </div>
+                                        @if ($errors->has('can_return'))
+                                            <span class="requride_cls"><strong>{{ $errors->first('can_return') }}</strong></span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3 col-sm-12 @if ($product->can_return == 0) d-none @endif" id="give_needed" >
+                                    <label for="give_needed_item">
+                                        Give Needed Item   <span class="requride_cls">*</span>
+                                    </label>
+                                    <div class="form-check-input">
+                                        <input type="checkbox" class="checkbox" id="replacement" name="give_needed_item[]" value="1" @if ($product->give_needed_item == 1 || $product->give_needed_item == 3) checked @endif>
+                                        <label class="form-check-label" for="replacement">Replacement</label>
+                                        <input type="checkbox" class="checkbox" id="cashback" name="give_needed_item[]" value="2" @if ($product->give_needed_item == 2 || $product->give_needed_item == 3) checked @endif>
+                                        <label class="form-check-label" for="cashback">Cashback</label>
+                                    </div>
+                                        <span class="requride_cls"><strong id="checkValid"></strong></span>
+                                    @if ($errors->has('give_needed_item'))
+                                        <span class="requride_cls"><strong>{{ $errors->first('give_needed_item') }}</strong></span>
+                                    @endif
+                                </div>
                                 </div>
 
 
@@ -348,6 +397,32 @@
                 submitHandler: function(form) {
                     form.submit();
                     $(':input[type="submit"]').prop('disabled', true);
+                }
+            });
+
+            $('input:radio[name="can_return"]').on('change', function(){
+                val = $(this).val();
+                if($("#can_return").is(":checked")){
+                    $("#give_needed").removeClass('d-none');
+                } else {
+                    $('.checkbox').prop('checked', false);
+                    $("#give_needed").addClass('d-none');
+                }
+            });
+
+           $('body').on('click',':input[type="submit"]',function(){
+                $("#form").valid();
+                if($("#can_return").is(":checked")){
+                    if($('.checkbox:checkbox:checked').length < 1) {
+                        $('#checkValid').text('Select Atleast One');
+                        return false;
+                    }else{
+                        $('#checkValid').text('');
+                        return true;
+                    }
+                }else {
+                    $('#checkValid').text('');
+                    return true;
                 }
             });
         });

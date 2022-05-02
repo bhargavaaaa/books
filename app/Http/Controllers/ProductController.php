@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Publication;
 use App\Models\School;
+use App\Models\Standard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -34,10 +35,12 @@ class ProductController extends Controller
         $publications = Publication::get();
         $schools = School::where('is_active',1)->get();
         $categories = Category::where('is_active',1)->get();
-        return view($this->view . '/form', compact('moduleName', 'boards','schools','publications','categories'));
+        $standards = Standard::where('is_active',1)->get();
+        return view($this->view . '/form', compact('moduleName', 'boards','schools','publications','categories','standards'));
     }
     public function store(SchoolRequest $request)
     {
+        // dd($request->all());
         $fileName = Null;
         if ($file = $request->file('image')) {
             $fileName = time() .".".$file->getClientOriginalExtension();
@@ -50,6 +53,15 @@ class ProductController extends Controller
             $attr[$attribute_name[$i]] = $attribute_value[$i];
         }
 
+        $give_needed_item = 0;
+        if(isset($request->give_needed_item)) {
+            if(count($request->give_needed_item) == 2) {
+                $give_needed_item = 3;
+            } else {
+                $give_needed_item = $request->give_needed_item[0];
+            }
+        }
+
         $product = Product::create([
             'product_name'  => ucfirst(trim($request->name)),
             'sku'  => str_slug($request->name),
@@ -58,6 +70,8 @@ class ProductController extends Controller
             'cutout_price' => $request->cutout_price,
             'attributes' => json_encode($attr),
             'sale_price' => $request->sale_price,
+            'give_needed_item' => $give_needed_item,
+            'can_return' => $request->can_return,
             'is_active' => $request->is_active,
         ]);
 
@@ -73,6 +87,9 @@ class ProductController extends Controller
         $category_id =  $request->category;
         $product->category()->attach($category_id);
 
+        $standard_id = $request->standard;
+        $product->standard()->attach($standard_id);
+
         Helper::successMsg('insert', $this->moduleName);
 
         return redirect(route($this->route . '.index'));
@@ -81,7 +98,7 @@ class ProductController extends Controller
 
     public function getData(Request $request)
     {
-        $data = Product::with(['board','publication','school'])->select();
+        $data = Product::with(['board','publication','school', 'standard'])->select();
 
         return DataTables::eloquent($data)
             ->addColumn('action', function ($row) {
@@ -129,6 +146,13 @@ class ProductController extends Controller
                 }
                 return $school_id;
             })
+            ->editColumn('standard_id',function($row){
+                $standard_id = array();
+                foreach($row->standard as $standard){
+                    array_push($standard_id,$standard->standard_name);
+                }
+                return $standard_id;
+            })
             ->editColumn('publication_id',function($row){
                 $publication_id = array();
                 foreach($row->publication as $publication){
@@ -153,7 +177,7 @@ class ProductController extends Controller
                     return '<span class="badge badge-danger">In Active</span>';
                 }
             })
-            ->rawColumns(['action','board_id', 'product_desc','product_photo','publication_id','is_active'])
+            ->rawColumns(['action','board_id', 'product_desc','product_photo','publication_id','standard_id','is_active'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -167,6 +191,7 @@ class ProductController extends Controller
 
         $schools = School::where('is_active',1)->get();
         $categories = Category::where('is_active',1)->get();
+        $standards = Standard::where('is_active',1)->get();
 
         $board_ids = array();
         foreach($product->board as $board){
@@ -187,8 +212,13 @@ class ProductController extends Controller
         foreach($product->category as $category){
         array_push($category_ids,$category->id);
         }
+
+        $standard_ids = array();
+        foreach($product->standard as $standard){
+        array_push($standard_ids,$standard->id);
+        }
         $attr = json_decode($product->attributes,true);
-        return view($this->view . '/_form', compact('moduleName','product','attr', 'boards','publications','schools','categories','board_ids','publication_ids','school_ids','category_ids'));
+        return view($this->view . '/_form', compact('moduleName','product','attr', 'boards','publications','schools','standards','categories','board_ids','publication_ids','school_ids','category_ids','standard_ids'));
     }
 
     public function update(SchoolRequest $request,$id)
@@ -221,6 +251,15 @@ class ProductController extends Controller
         }
 
 
+        $give_needed_item = 0;
+        if(isset($request->give_needed_item)) {
+            if(count($request->give_needed_item) == 2) {
+                $give_needed_item = 3;
+            } else {
+                $give_needed_item = $request->give_needed_item[0];
+            }
+        }
+
         $product->update([
             'product_name'  => ucfirst(trim($request->name)),
             'sku'  => str_slug($request->name),
@@ -229,6 +268,8 @@ class ProductController extends Controller
             'cutout_price' => $request->cutout_price,
             'attributes' => json_encode($attr),
             'sale_price' => $request->sale_price,
+            'give_needed_item' => $give_needed_item,
+            'can_return' => $request->can_return,
             'is_active' => $request->is_active,
         ]);
 
@@ -260,6 +301,12 @@ class ProductController extends Controller
             $product->category()->sync([]);
         }
 
+        if($request->standard != null){
+            $standard_id =  $request->standard;
+            $product->standard()->attach($standard_id);
+        }else{
+            $product->standard()->sync([]);
+        }
 
         Helper::successMsg('update', $this->moduleName);
 
@@ -273,6 +320,7 @@ class ProductController extends Controller
         DB::beginTransaction();
             $school->board()->sync([]);
             $school->publication()->sync([]);
+            $school->standard()->sync([]);
             $res = $school->delete();
         DB::commit();
         if ($res) {
