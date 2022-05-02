@@ -1,33 +1,11 @@
 <div class="site-header header-3  d-none d-lg-block">
     <div class="container">
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-lg-4">
-                <ul class="header-top-list">
-                    <li class="dropdown-trigger currency-dropdown"><a href="">£ GBP </a><i
-                            class="fas fa-chevron-down dropdown-arrow"></i>
-                        <ul class="dropdown-box">
-                            <li><a href="#">€ Euro</a></li>
-                            <li><a href="#">£ Pound Sterling</a></li>
-                            <li><a href="#">$ US Dollar</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown-trigger language-dropdown"><a href=""><span class="flag-img"><img
-                                    src="{{ asset('public/front/image/icon/eng-flag.png') }}" alt=""></span>en-gb
-                        </a><i class="fas fa-chevron-down dropdown-arrow"></i>
-                        <ul class="dropdown-box">
-                            <li> <a href=""> <span class="flag-img"><img
-                                            src="{{ asset('public/front/image/icon/eng-flag.png') }}"
-                                            alt=""></span>English</a></li>
-                            <li> <a href=""> <span class="flag-img"><img
-                                            src="{{ asset('public/front/image/icon/germany-flag.png') }}"
-                                            alt=""></span>Germany</a></li>
-                        </ul>
-                    </li>
-                </ul>
+               
             </div>
             <div class="col-lg-8 flex-lg-right">
                 <ul class="header-top-list">
-                    <li><a href=""><i class="icons-left fas fa-random"></i>My Compare</a>
                     </li>
                     <li class="dropdown-trigger language-dropdown"><a href=""><i class="icons-left fas fa-heart"></i>
                             wishlist (0)</a>
@@ -43,11 +21,10 @@
                     </li>
                     <li><a href=""><i class="icons-left fas fa-phone"></i> Contact</a>
                     </li>
-                    <li><a href=""><i class="icons-left fas fa-share"></i> Checkout</a>
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> --}}
     </div>
     <div class="header-middle pt--10 pb--10">
         <div class="container">

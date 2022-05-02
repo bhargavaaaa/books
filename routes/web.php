@@ -50,7 +50,7 @@ Route::view('/product-details-affiliate','front.product-details-affiliate');
 Route::view('/product-details','front.product-details');
 Route::view('/shop-grid','front.shop-grid');
 Route::view('/shop-list','front.shop-list');
-Route::view('/whishlist','front.whishlist');
+Route::view('/wishlist','front.wishlist');
 
 
 Route::group(['prefix' => 'admin'], function () {
