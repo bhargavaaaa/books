@@ -33,9 +33,15 @@ Route::get('/clear-cache', function () {
 });
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    // return redirect()->route('login');
+    return view('welcome');
 })->name('site.home');
 
+Route::view('/cart','front.cart');
+Route::view('/checkout','front.checkout');
+Route::view('/compare','front.compare');
+Route::view('/contact-2','front.contact-2');
+Route::view('/contact','front.contact');
 
 
 Route::group(['prefix' => 'admin'], function () {
