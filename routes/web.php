@@ -42,6 +42,15 @@ Route::view('/checkout','front.checkout');
 Route::view('/compare','front.compare');
 Route::view('/contact-2','front.contact-2');
 Route::view('/contact','front.contact');
+Route::view('/login-register','front.login-register');
+Route::view('/my-account','front.my-account');
+Route::view('/faq','front.faq');
+Route::view('/order-details','front.order-details');
+Route::view('/product-details-affiliate','front.product-details-affiliate');
+Route::view('/product-details','front.product-details');
+Route::view('/shop-grid','front.shop-grid');
+Route::view('/shop-list','front.shop-list');
+Route::view('/whishlist','front.whishlist');
 
 
 Route::group(['prefix' => 'admin'], function () {
