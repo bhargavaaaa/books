@@ -61,11 +61,11 @@
 										</form>
 									</div>
 									<!-- Slide Down Trigger  -->
-									<div class="checkout-quick-box">
+									{{-- <div class="checkout-quick-box">
 										<p><i class="far fa-sticky-note"></i>Have a coupon? <a href="javascript:"
 												class="slide-trigger" data-target="#quick-cupon">
 												Click here to enter your code</a></p>
-									</div>
+									</div> --}}
 									<!-- Slide Down Blox ==> Cupon Box -->
 									<div class="checkout-slidedown-box" id="quick-cupon">
 										<form action="./">
