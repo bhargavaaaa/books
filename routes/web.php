@@ -6,8 +6,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CMSPageController;
 use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\HomeBanner;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\StandardController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +34,13 @@ Route::get('/clear-cache', function () {
     return redirect('admin/home');
 });
 
-Route::get('/', function () {
-    // return redirect()->route('login');
-    return view('welcome');
-})->name('site.home');
+// Route::get('/', function () {
+//     // return redirect()->route('login');
+//     Route::get('home', [MainController::class, 'home'])
+//     return view('welcome');
+// })->name('site.home');
+
+Route::get('/', [MainController::class, 'home'])->name('site.home');
 
 Route::view('/cart','front.cart');
 Route::view('/checkout','front.checkout');
@@ -189,5 +194,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [CMSPageController::class, 'edit'])->name('cms_page.edit');
         Route::put('/{id}', [CMSPageController::class, 'update'])->name('cms_page.update');
         Route::get('/delete/{id}', [CMSPageController::class, 'delete'])->name('cms_page.delete');
+    });
+
+    Route::prefix('banner')->group(function () {
+        Route::get('/',[HomeBanner::class, 'index'])->name('banner.index');
+        Route::get('/getBannerData',[HomeBanner::class, 'getBannerData'])->name('banner.getBannerData');
+        Route::get('/create', [HomeBanner::class, 'create'])->name('banner.create');
+        Route::post('/store', [HomeBanner::class, 'store'])->name('banner.store');
+        Route::get('/view/{id}', [HomeBanner::class, 'view'])->name('banner.view');
+        Route::get('/delete/{id}', [HomeBanner::class, 'delete'])->name('banner.delete');
+        Route::get('/activeInactive/{id}',[HomeBanner::class, 'activeInactive'])->name('banner.activeInactive');
     });
 });

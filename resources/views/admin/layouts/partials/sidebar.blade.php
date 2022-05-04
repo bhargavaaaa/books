@@ -98,6 +98,13 @@
             </li>
 
             <li class="nav-item">
+                <a href="{{ route('banner.index') }}" class="nav-link {{ (\Request::segment(2) == 'banner') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-users"></i>
+                <p>Home Banner</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a href="{{ route('cms_page.index') }}" class="nav-link {{ (\Request::segment(2) == 'cms_page') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
                 <p>CMS Pages</p>
