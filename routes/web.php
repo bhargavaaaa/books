@@ -6,8 +6,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CMSPageController;
 use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\HomeBanner;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\ReturnController;
+use App\Http\Controllers\Admin\StandardController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +35,28 @@ Route::get('/clear-cache', function () {
     return redirect('admin/home');
 });
 
-Route::get('/', function () {
-    return redirect()->route('login');
-})->name('site.home');
+// Route::get('/', function () {
+//     // return redirect()->route('login');
+//     Route::get('home', [MainController::class, 'home'])
+//     return view('welcome');
+// })->name('site.home');
 
+Route::get('/', [MainController::class, 'home'])->name('site.home');
+
+Route::view('/cart','front.cart');
+Route::view('/checkout','front.checkout');
+Route::view('/compare','front.compare');
+Route::view('/contact-2','front.contact-2');
+Route::view('/contact','front.contact');
+Route::view('/login-register','front.login-register');
+Route::view('/my-account','front.my-account');
+Route::view('/faq','front.faq');
+Route::view('/order-details','front.order-details');
+Route::view('/product-details-affiliate','front.product-details-affiliate');
+Route::view('/product-details','front.product-details');
+Route::view('/shop-grid','front.shop-grid');
+Route::view('/shop-list','front.shop-list');
+Route::view('/wishlist','front.wishlist');
 
 
 Route::group(['prefix' => 'admin'], function () {
@@ -115,6 +136,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/ActiveInactive/{id}', [SchoolController::class, 'ActiveInactive'])->name('school.activeInactive')->middleware("permission:activeinactive.schools");
     });
 
+    Route::prefix('standard')->group(function () {
+        Route::get('/', [StandardController::class, 'index'])->name('standard.index');
+        Route::get('/getStandardData', [StandardController::class, 'getStandardData'])->name('standard.getStandardData');
+        Route::get('/create', [StandardController::class, 'create'])->name('standard.create');
+        Route::post('/store', [StandardController::class, 'store'])->name('standard.store');
+        Route::get('/edit/{id}', [StandardController::class,'edit'])->name('standard.edit');
+        Route::put('/{id}', [StandardController::class, 'update'])->name('standard.update');
+        Route::get('/delete/{id}',[StandardController::class, 'delete'])->name('standard.delete');
+        Route::get('/standardActiveInactive/{id}',[StandardController::class, 'standardActiveInactive'])->name('standard.activeInactive');
+    });
+
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index')->middleware("permission:view.products");
         Route::get('/getData', [ProductController::class, 'getData'])->name('product.getData')->middleware("permission:view.products");
@@ -176,5 +208,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [CMSPageController::class, 'edit'])->name('cms_page.edit');
         Route::put('/{id}', [CMSPageController::class, 'update'])->name('cms_page.update');
         Route::get('/delete/{id}', [CMSPageController::class, 'delete'])->name('cms_page.delete');
+    });
+
+    Route::prefix('banner')->group(function () {
+        Route::get('/',[HomeBanner::class, 'index'])->name('banner.index');
+        Route::get('/getBannerData',[HomeBanner::class, 'getBannerData'])->name('banner.getBannerData');
+        Route::get('/create', [HomeBanner::class, 'create'])->name('banner.create');
+        Route::post('/store', [HomeBanner::class, 'store'])->name('banner.store');
+        Route::get('/view/{id}', [HomeBanner::class, 'view'])->name('banner.view');
+        Route::get('/delete/{id}', [HomeBanner::class, 'delete'])->name('banner.delete');
+        Route::get('/activeInactive/{id}',[HomeBanner::class, 'activeInactive'])->name('banner.activeInactive');
     });
 });

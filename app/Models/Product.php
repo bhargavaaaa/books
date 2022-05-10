@@ -26,4 +26,9 @@ class Product extends Model
         return $this->belongsToMany(Board::class,'board_products');//->withTimestamps();
     }
 
+    public function standard()
+    {
+        return $this->belongsToMany(Standard::class,'product_standards');
+    }
+
 }

@@ -65,6 +65,13 @@
           </li>
          @endpermission
 
+        <li class="nav-item">
+            <a href="{{ route('standard.index') }}" class="nav-link {{ (\Request::segment(2) == 'standard') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-users"></i>
+            <p>Standard</p>
+            </a>
+        </li>
+
          @permission('view.category')
             <li class="nav-item">
                 <a href="{{ route('category.index') }}" class="nav-link {{ (\Request::segment(2) == 'category') ? 'active' : '' }}">
@@ -87,6 +94,13 @@
                 <a href="{{ route('contact_us.index') }}" class="nav-link {{ (\Request::segment(2) == 'contact_us') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-users"></i>
                 <p>Contact Us</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ route('banner.index') }}" class="nav-link {{ (\Request::segment(2) == 'banner') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-users"></i>
+                <p>Home Banner</p>
                 </a>
             </li>
 
