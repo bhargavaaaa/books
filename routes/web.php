@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CMSPageController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\OrdersController;
+use App\Http\Controllers\Admin\ReturnController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -135,6 +136,19 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('getRejectedOrdersData', [OrdersController::class, 'getRejectedOrdersData'])->name('orders.getRejectedOrdersData');
         Route::get('show/{id}', [OrdersController::class, 'show'])->name('orders.show');
         Route::post('state/change', [OrdersController::class, 'stateChange'])->name('orders.state.change');
+    });
+
+    Route::prefix('return-orders')->group(function () {
+        Route::get('/', [ReturnController::class, 'index'])->name('return.orders.index');
+        Route::post('getRequestRegisteredData', [ReturnController::class, 'getRequestRegisteredData'])->name('return.orders.getRequestRegisteredData');
+        Route::post('getRequestAcceptedData', [ReturnController::class, 'getRequestAcceptedData'])->name('return.orders.getRequestAcceptedData');
+        Route::post('getRequestRejectedData', [ReturnController::class, 'getRequestRejectedData'])->name('return.orders.getRequestRejectedData');
+        Route::post('getReturnTakenData', [ReturnController::class, 'getReturnTakenData'])->name('return.orders.getReturnTakenData');
+        Route::post('getReturnAcceptedData', [ReturnController::class, 'getReturnAcceptedData'])->name('return.orders.getReturnAcceptedData');
+        Route::post('getReturnRejectedData', [ReturnController::class, 'getReturnRejectedData'])->name('return.orders.getReturnRejectedData');
+        Route::post('getCashbackGivenData', [ReturnController::class, 'getCashbackGivenData'])->name('return.orders.getCashbackGivenData');
+        Route::post('getReplacementGivenData', [ReturnController::class, 'getReplacementGivenData'])->name('return.orders.getReplacementGivenData');
+        Route::post('state/change', [ReturnController::class, 'stateChange'])->name('return.orders.state.change');
     });
 
     Route::group(['prefix' => 'category'], function(){
