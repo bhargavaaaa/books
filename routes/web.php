@@ -11,10 +11,18 @@
 // use App\Http\Controllers\Admin\SchoolController;
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CMSPageController;
+use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\HomeBanner;
+use App\Http\Controllers\Admin\OrdersController;
+use App\Http\Controllers\Admin\ReturnController;
+use App\Http\Controllers\Admin\StandardController;
+use App\Http\Controllers\MainController;
+use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,8 +42,11 @@ Route::get('/clear-cache', function () {
 
 // Route::get('/', function () {
 //     // return redirect()->route('login');
+//     Route::get('home', [MainController::class, 'home'])
 //     return view('welcome');
 // })->name('site.home');
+
+Route::get('/', [MainController::class, 'home'])->name('site.home');
 
 Route::view('/cart','front.cart');
 Route::view('/checkout','front.checkout');
@@ -176,6 +187,19 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('state/change', [App\Http\Controllers\Admin\OrdersController::class, 'stateChange'])->name('orders.state.change')->middleware("permission:edit.orders");
     });
 
+    Route::prefix('return-orders')->group(function () {
+        Route::get('/', [ReturnController::class, 'index'])->name('return.orders.index');
+        Route::post('getRequestRegisteredData', [ReturnController::class, 'getRequestRegisteredData'])->name('return.orders.getRequestRegisteredData');
+        Route::post('getRequestAcceptedData', [ReturnController::class, 'getRequestAcceptedData'])->name('return.orders.getRequestAcceptedData');
+        Route::post('getRequestRejectedData', [ReturnController::class, 'getRequestRejectedData'])->name('return.orders.getRequestRejectedData');
+        Route::post('getReturnTakenData', [ReturnController::class, 'getReturnTakenData'])->name('return.orders.getReturnTakenData');
+        Route::post('getReturnAcceptedData', [ReturnController::class, 'getReturnAcceptedData'])->name('return.orders.getReturnAcceptedData');
+        Route::post('getReturnRejectedData', [ReturnController::class, 'getReturnRejectedData'])->name('return.orders.getReturnRejectedData');
+        Route::post('getCashbackGivenData', [ReturnController::class, 'getCashbackGivenData'])->name('return.orders.getCashbackGivenData');
+        Route::post('getReplacementGivenData', [ReturnController::class, 'getReplacementGivenData'])->name('return.orders.getReplacementGivenData');
+        Route::post('state/change', [ReturnController::class, 'stateChange'])->name('return.orders.state.change');
+    });
+
     Route::group(['prefix' => 'category'], function(){
         Route::get('/', [App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('category.index')->middleware("permission:view.category");
         Route::get('/getCategoryData', [App\Http\Controllers\Admin\CategoryController::class, 'getCategoryData'])->name('category.getCategoryData')->middleware("permission:view.category");
@@ -201,5 +225,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [App\Http\Controllers\Admin\CMSPageController::class, 'edit'])->name('cms_page.edit');
         Route::put('/{id}', [App\Http\Controllers\Admin\CMSPageController::class, 'update'])->name('cms_page.update');
         Route::get('/delete/{id}', [App\Http\Controllers\Admin\CMSPageController::class, 'delete'])->name('cms_page.delete');
+    });
+
+    Route::prefix('banner')->group(function () {
+        Route::get('/',[HomeBanner::class, 'index'])->name('banner.index');
+        Route::get('/getBannerData',[HomeBanner::class, 'getBannerData'])->name('banner.getBannerData');
+        Route::get('/create', [HomeBanner::class, 'create'])->name('banner.create');
+        Route::post('/store', [HomeBanner::class, 'store'])->name('banner.store');
+        Route::get('/view/{id}', [HomeBanner::class, 'view'])->name('banner.view');
+        Route::get('/delete/{id}', [HomeBanner::class, 'delete'])->name('banner.delete');
+        Route::get('/activeInactive/{id}',[HomeBanner::class, 'activeInactive'])->name('banner.activeInactive');
     });
 });
