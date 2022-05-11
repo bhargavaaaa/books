@@ -1,21 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Helpers\Helper;
-use App\Http\Requests\PublicationRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\SchoolRequest;
 use App\Models\Board;
 use App\Models\Publication;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Yajra\DataTables\Facades\DataTables;
 
-class PublicationController extends Controller
+class SchoolController extends Controller
 {
-    public $moduleName = 'Publication';
-    public $route = 'publication';
-    public $view = 'admin.publication';
+    public $moduleName = 'School';
+    public $route = 'school';
+    public $view = 'admin.school';
 
 
     public function index()
@@ -29,26 +31,29 @@ class PublicationController extends Controller
     {
         $moduleName = $this->moduleName;
         $boards = Board::get();
-        return view($this->view . '/form', compact('moduleName', 'boards'));
+        $publications = Publication::get();
+        return view($this->view . '/form', compact('moduleName', 'boards','publications'));
     }
-    public function store(PublicationRequest $request)
+    public function store(SchoolRequest $request)
     {
         $fileName = Null;
         if ($file = $request->file('image')) {
             $fileName = time() .".".$file->getClientOriginalExtension();
-            $file->storeAs('publication/',$fileName);
+            $file->storeAs('school/',$fileName);
         }
 
-
-        $publication = Publication::create([
-            'publication_name'  => ucfirst(trim($request->name)),
-            'publication_desc'  => $request->description,
-            'publication_photo' => $fileName,
+        $school = School::create([
+            'school_name'  => ucfirst(trim($request->name)),
+            'school_desc'  => $request->description,
+            'school_photo' => $fileName,
             'is_active' => $request->is_active,
         ]);
 
         $board_id =  $request->board;
-        $publication->board()->attach($board_id);
+        $school->board()->attach($board_id);
+
+        $publication_id =  $request->publication;
+        $school->publication()->attach($publication_id);
 
         Helper::successMsg('insert', $this->moduleName);
 
@@ -58,27 +63,25 @@ class PublicationController extends Controller
 
     public function getData(Request $request)
     {
-        $data = Publication::select();
+        $data = School::with(['board','publication'])->select();
 
         return DataTables::eloquent($data)
             ->addColumn('action', function ($row) {
                 $editUrl = route($this->route . '.edit', encrypt($row->id));
                 $deleteId = encrypt($row->id);
 
-                $activeUrl = route('publication.activeInactive',encrypt($row->id));
-                $deactiveUrl = route('publication.activeInactive',encrypt($row->id));
-
-
+                $activeUrl = route('school.activeInactive' ,encrypt($row->id));
+                $deactiveUrl = route('school.activeInactive',encrypt($row->id));
 
                 $action = '';
-                if (auth()->user()->hasPermission('edit.publications')) {
+                if (auth()->user()->hasPermission('edit.schools')) {
                     $action .= "<a href='" . $editUrl . "' class='btn btn-warning btn-xs'><i class='fas fa-pencil-alt'></i> Edit</a>";
                 }
-                if (auth()->user()->hasPermission('delete.publications')) {
+                if (auth()->user()->hasPermission('delete.schools')) {
                     $action .= " <a id='delete' href='#' data-id='" . $deleteId . "' class='btn btn-danger btn-xs delete'><i class='fa fa-trash'></i> Delete</a>";
                 }
 
-                if (auth()->user()->hasPermission('activeinactive.publications')) {
+                if (auth()->user()->hasPermission('activeinactive.schools')) {
                     if ($row->is_active == '0') {
                         $action .= " <a id='activate' href='" . $activeUrl . "' class='btn btn-success btn-xs activeUser'><i class='fa fa-check'></i> Activate</a>";
                     } else {
@@ -94,8 +97,22 @@ class PublicationController extends Controller
                 }
                 return $board_id;
             })
-            ->editColumn('publication_desc',function($row){
-                return substr($row->publication_desc,0,100);
+            ->editColumn('publication_id',function($row){
+                $publication_id = array();
+                foreach($row->publication as $publication){
+                    array_push($publication_id,$publication->publication_name);
+                }
+                return $publication_id;
+            })
+            ->editColumn('school_desc',function($row){
+                return substr($row->school_desc,0,100);
+            })
+            ->editColumn('school_photo',function($row){
+                if($row->school_photo != null){
+                return '<img src="'.URL::to("/storage/app/school/".$row->school_photo).'" alt="image not load" heigth="100" width="150">';
+            }else{
+                return '---- No Image ----';
+                }
             })
             ->editColumn('is_active',function($row){
                 if($row->is_active == 1){
@@ -104,14 +121,7 @@ class PublicationController extends Controller
                     return '<span class="badge badge-danger">In Active</span>';
                 }
             })
-            ->editColumn('publication_photo',function($row){
-                if($row->publication_photo != null){
-                return '<img src="'.URL::to("/storage/app/publication/".$row->publication_photo).'" alt="publication image" heigth="100" width="150">';
-            }else{
-                return '---- No Image ----';
-                }
-            })
-            ->rawColumns(['action','board_id', 'publication_desc','publication_photo','is_active'])
+            ->rawColumns(['action','board_id', 'school_desc','school_photo','publication_id','is_active'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -120,49 +130,61 @@ class PublicationController extends Controller
     {
         $moduleName = $this->moduleName;
         $boards = Board::get();
-        $publication = Publication::with('board')->find(decrypt($id));
+        $publications = Publication::get();
+        $school = School::with(['board','publication'])->find(decrypt($id));
         $board_ids = array();
-        foreach($publication->board as $board){
+        foreach($school->board as $board){
         array_push($board_ids,$board->id);
         }
-        return view($this->view . '/_form', compact('moduleName', 'boards','publication','board_ids'));
+        $publication_ids = array();
+        foreach($school->publication as $publication){
+        array_push($publication_ids,$publication->id);
+        }
+        return view($this->view . '/_form', compact('moduleName', 'boards','publications','school','board_ids','publication_ids'));
     }
 
-    public function update(PublicationRequest $request,$id)
+    public function update(SchoolRequest $request,$id)
     {
-        $publication = Publication::with('board')->where('id',decrypt($id))->first();
+        $school = School::with('board')->where('id',decrypt($id))->first();
 
         $fileName = Null;
         if ($file = $request->file('image')) {
             if($request->old_image != null||$request->old_image != ''){
                 try {
-                unlink(storage_path('/app/publication/'.$request->old_image));
+                unlink(storage_path('/app/school/'.$request->old_image));
             } catch (\Throwable $th) {}
             }
                 $fileName = time() .".".$file->getClientOriginalExtension();
-                $file->storeAs('publication/',$fileName);
+                $file->storeAs('school/',$fileName);
         }else{
             if($request->old_image == null||$request->old_image == ''){
                 try {
-                unlink(storage_path('/app/publication/'.$publication->publication_photo));
+                unlink(storage_path('/app/school/'.$school->school_photo));
             } catch (\Throwable $th) {}
             }
             $fileName = $request->old_image;
         }
 
 
-        $publication->update([
-            'publication_name'  => ucfirst(trim($request->name)),
-            'publication_desc'  => $request->description,
-            'publication_photo' => $fileName,
+        $school->update([
+            'school_name'  => ucfirst(trim($request->name)),
+            'school_desc'  => $request->description,
+            'school_photo' => $fileName,
             'is_active' => $request->is_active,
         ]);
 
         if($request->board != null){
             $board_id =  $request->board;
-            $publication->board()->sync($board_id);
+            $school->board()->sync($board_id);
         }else{
-            $publication->board()->sync([]);
+            $school->board()->sync([]);
+        }
+
+        if($request->publication != null){
+            $publication_id =  $request->publication;
+            $school->publication()->sync($publication_id);
+        }else{
+            $school->publication()->sync([]);
         }
 
         Helper::successMsg('update', $this->moduleName);
@@ -173,10 +195,11 @@ class PublicationController extends Controller
     public function delete(Request $request)
     {
         $res = false;
-        $publication = Publication::with('board')->where('id', decrypt($request->id))->first();
+        $school = School::with(['board','publication'])->where('id', decrypt($request->id))->first();
         DB::beginTransaction();
-            $publication->board()->sync([]);
-            $res = $publication->delete();
+            $school->board()->sync([]);
+            $school->publication()->sync([]);
+            $res = $school->delete();
         DB::commit();
         if ($res) {
 
@@ -189,16 +212,15 @@ class PublicationController extends Controller
 
     public function ActiveInactive($id)
     {
-        $publication = Publication::find(decrypt($id));
-        if($publication->is_active == 1) {
-            $publication->update(['is_active' => 0]);
+        $school = School::find(decrypt($id));
+        if($school->is_active == 1) {
+            $school->update(['is_active' => 0]);
             Helper::activeDeactiveMsg('deactive',$this->moduleName);
 
         } else {
-            $publication->update(['is_active' => 1]);
+            $school->update(['is_active' => 1]);
             Helper::activeDeactiveMsg('active', $this->moduleName);
         }
-
         return redirect(route($this->route.'.index'));
     }
 }

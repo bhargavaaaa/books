@@ -177,6 +177,48 @@ class PermissionsTableSeeder extends Seeder
             Permission::create(['name' => 'Active/Inactive products', 'slug' => 'activeinactive.products', 'description' => 'Can Activate or deactivate products', 'model' => 'Product',]);
         }
 
+        /* permission for product module start */
+        if (Permission::where('name', '=', 'Create products')->first() === null) {
+            Permission::create(['name' => 'Create products', 'slug' => 'create.products', 'description' => 'Can Add products', 'model' => 'Product',]);
+        }
+
+        if (Permission::where('name', '=', 'View products')->first() === null) {
+            Permission::create(['name' => 'View products', 'slug' => 'view.products', 'description' => 'Can view products', 'model' => 'Product',]);
+        }
+
+        if (Permission::where('name', '=', 'Edit products')->first() === null) {
+            Permission::create(['name' => 'Edit products', 'slug' => 'edit.products', 'description' => 'Can edit products', 'model' => 'Product',]);
+        }
+
+        if (Permission::where('name', '=', 'Delete products')->first() === null) {
+            Permission::create(['name' => 'Delete products', 'slug' => 'delete.products', 'description' => 'Can Delete products', 'model' => 'Product',]);
+        }
+        if (Permission::where('name', '=', 'Active/Inactive products')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive products', 'slug' => 'activeinactive.products', 'description' => 'Can Activate or deactivate products', 'model' => 'Product',]);
+        }
+
+        /* permission for product module end */
+
+        /* permission for order module start */
+        if (Permission::where('name', '=', 'Create orders')->first() === null) {
+            Permission::create(['name' => 'Create orders', 'slug' => 'create.orders', 'description' => 'Can Add orders', 'model' => 'Order',]);
+        }
+
+        if (Permission::where('name', '=', 'View orders')->first() === null) {
+            Permission::create(['name' => 'View orders', 'slug' => 'view.orders', 'description' => 'Can view orders', 'model' => 'Order',]);
+        }
+
+        if (Permission::where('name', '=', 'Edit orders')->first() === null) {
+            Permission::create(['name' => 'Edit orders', 'slug' => 'edit.orders', 'description' => 'Can edit orders', 'model' => 'Order',]);
+        }
+
+        if (Permission::where('name', '=', 'Delete orders')->first() === null) {
+            Permission::create(['name' => 'Delete orders', 'slug' => 'delete.orders', 'description' => 'Can Delete orders', 'model' => 'Order',]);
+        }
+        if (Permission::where('name', '=', 'Active/Inactive orders')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive orders', 'slug' => 'activeinactive.orders', 'description' => 'Can Activate or deactivate orders', 'model' => 'Order',]);
+        }
+
         /* permission for product module end */
     }
 }

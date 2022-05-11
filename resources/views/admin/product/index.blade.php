@@ -130,7 +130,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: "{{ route('school.delete') }}",
+                                url: "{{ route('product.delete') }}",
                                 type: "POST",
                                 data: {
                                     id: delId

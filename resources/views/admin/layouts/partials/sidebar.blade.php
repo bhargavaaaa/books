@@ -111,6 +111,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+              <a href="{{ route('return.orders.index') }}" class="nav-link {{ (\Request::segment(2) == 'return-orders') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-users"></i>
+              <p>Return Orders</p>
+              </a>
+            </li>
+
        </ul>
      </nav>
      <!-- /.sidebar-menu -->

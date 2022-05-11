@@ -15,6 +15,7 @@
         </section>
         <main class="inner-page-sec-padding-bottom">
             <div class="container">
+                {{ dd($product) }}
                 <div class="row  mb--60">
                     <div class="col-lg-5 mb--30">
                         <!-- Product Details Slider Big Image-->
@@ -27,19 +28,19 @@
               "asNavFor": ".product-slider-nav"
               }'>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-1.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-1.jpg') }}" alt="">
                             </div>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-2.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-2.jpg') }}" alt="">
                             </div>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-3.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-3.jpg') }}" alt="">
                             </div>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-4.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-4.jpg') }}" alt="">
                             </div>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-5.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-5.jpg') }}" alt="">
                             </div>
                         </div>
                         <!-- Product Details Slider Nav -->
@@ -55,36 +56,42 @@
               "focusOnSelect": true
               }'>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-1.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-1.jpg') }}" alt="">
                             </div>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-2.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-2.jpg') }}" alt="">
                             </div>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-3.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-3.jpg') }}" alt="">
                             </div>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-4.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-4.jpg') }}" alt="">
                             </div>
                             <div class="single-slide">
-                                <img src="{{ asset('image/public/front/products/product-details-5.jpg') }}" alt="">
+                                <img src="{{ asset('public/front/image/products/product-details-5.jpg') }}" alt="">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-7">
+                        @php
+                            $categories = $product->category;
+                            $publications = $product->publication;
+                        @endphp
+                        {{dd($categories,$publications)}}
                         <div class="product-details-info pl-lg--30 ">
-                            <p class="tag-block">Tags: <a href="#">Movado</a>, <a href="#">Omega</a></p>
-                            <h3 class="product-title">Beats EP Wired On-Ear Headphone-Black</h3>
+                            {{-- <p class="tag-block">Tags: <a href="#">Movado</a>, <a href="#">Omega</a></p> --}}
+                            <p class="tag-block"><a href="#">{{ $product->category[0]->category_name }}</a></p>
+                            <h3 class="product-title">{{ $product->product_name }}</h3>
                             <ul class="list-unstyled">
                                 <li>Ex Tax: <span class="list-value"> £60.24</span></li>
-                                <li>Brands: <a href="#" class="list-value font-weight-bold"> Canon</a></li>
-                                <li>Product Code: <span class="list-value"> model1</span></li>
-                                <li>Reward Points: <span class="list-value"> 200</span></li>
-                                <li>Availability: <span class="list-value"> In Stock</span></li>
+                                <li>Publication: <a href="#" class="list-value font-weight-bold"> {{ $product->publication }}</a></li>
+                                <li>Product Code: <span class="list-value"> {{ $product->sku }}</span></li>
+                                {{-- <li>Reward Points: <span class="list-value"> 200</span></li> --}}
+                                {{-- <li>Availability: <span class="list-value"> In Stock</span></li> --}}
                             </ul>
                             <div class="price-block">
-                                <span class="price-new">£73.79</span>
-                                <del class="price-old">£91.86</del>
+                                <span class="price-new">£{{ $product->sale_price }}</span>
+                                <del class="price-old">£{{ $product->cutout_price }}</del>
                             </div>
                             <div class="rating-widget">
                                 <div class="rating-block">
@@ -141,21 +148,7 @@
                         <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab1">
                             <article class="review-article">
                                 <h1 class="sr-only">Tab Article</h1>
-                                <p>Fashion has been creating well-designed collections since 2010. The brand offers
-                                    feminine designs delivering
-                                    stylish
-                                    separates and statement dresses which have since evolved into a full ready-to-wear
-                                    collection in which every
-                                    item is
-                                    a
-                                    vital part of a woman's wardrobe. The result? Cool, easy, chic looks with youthful
-                                    elegance and unmistakable
-                                    signature
-                                    style. All the beautiful pieces are made in Italy and manufactured with the greatest
-                                    attention. Now Fashion
-                                    extends
-                                    to
-                                    a range of accessories including shoes, hats, belts and more!</p>
+                                {!!  $product->product_desc !!}
                             </article>
                         </div>
                         <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab2">
@@ -271,208 +264,49 @@
                 {"breakpoint":768, "settings": {"slidesToShow": 2} },
                 {"breakpoint":480, "settings": {"slidesToShow": 1} }
             ]'>
-                        <div class="single-slide">
-                            <div class="product-card">
-                                <div class="product-header">
-                                    <a href="" class="author">
-                                        Lpple
-                                    </a>
-                                    <h3><a href="product-details.html">Revolutionize Your BOOK With</a></h3>
-                                </div>
-                                <div class="product-card--body">
-                                    <div class="card-image">
-                                        <img src="{{ asset('public/front/image/products/product-10.jpg') }}" alt="">
-                                        <div class="hover-contents">
-                                            <a href="product-details.html" class="hover-image">
-                                                <img src="{{ asset('public/front/image/products/product-1.jpg') }}" alt="">
-                                            </a>
-                                            <div class="hover-btns">
-                                                <a href="cart.html" class="single-btn">
-                                                    <i class="fas fa-shopping-basket"></i>
+                        @foreach ($relatedProducts as $related)
+                            <div class="single-slide">
+                                <div class="product-card">
+                                    <div class="product-header">
+                                        <a href="" class="author">
+                                            {{ $related->category[0]->category_name }}
+                                        </a>
+                                        <h3><a href="{{ route('product_detail',encrypt($related->id)) }}">{{ $related->product_name }}</a></h3>
+                                    </div>
+                                    <div class="product-card--body">
+                                        <div class="card-image">
+                                            <img src="{{ isset($related->product_image) ? asset('storage/product/'.$related->product_image) : asset('public/front/image/products/product-10.jpg') }}" alt="">
+                                            <div class="hover-contents">
+                                                <a href="{{ route('product_detail',encrypt($related->id)) }}" class="hover-image">
+                                                    <img src="{{ isset($related->product_image) ? asset('storage/product/'.$related->product_image) : asset('public/front/image/products/product-1.jpg') }}" alt="">
                                                 </a>
-                                                <a href="wishlist.html" class="single-btn">
-                                                    <i class="fas fa-heart"></i>
-                                                </a>
-                                                <a href="compare.html" class="single-btn">
-                                                    <i class="fas fa-random"></i>
-                                                </a>
-                                                <a href="#" data-toggle="modal" data-target="#quickModal"
-                                                    class="single-btn">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
+                                                <div class="hover-btns">
+                                                    <a href="cart.html" class="single-btn">
+                                                        <i class="fas fa-shopping-basket"></i>
+                                                    </a>
+                                                    <a href="wishlist.html" class="single-btn">
+                                                        <i class="fas fa-heart"></i>
+                                                    </a>
+                                                    <a href="compare.html" class="single-btn">
+                                                        <i class="fas fa-random"></i>
+                                                    </a>
+                                                    <a href="#" data-toggle="modal" data-target="#quickModal"
+                                                        class="single-btn">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="price-block">
-                                        <span class="price">£51.20</span>
-                                        <del class="price-old">£51.20</del>
-                                        <span class="price-discount">20%</span>
+                                        <div class="price-block">
+                                            <span class="price">£{{ $related->sale_price }}</span>
+                                            <del class="price-old">£{{ $related->cutout_price }}</del>
+                                            {!! substr($product->product_desc, 0, 20).'...' !!}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="single-slide">
-                            <div class="product-card">
-                                <div class="product-header">
-                                    <a href="" class="author">
-                                        Jpple
-                                    </a>
-                                    <h3><a href="product-details.html">Turn Your BOOK Into High Machine</a>
-                                    </h3>
-                                </div>
-                                <div class="product-card--body">
-                                    <div class="card-image">
-                                        <img src="{{ asset('public/front/image/products/product-2.jpg') }}" alt="">
-                                        <div class="hover-contents">
-                                            <a href="product-details.html" class="hover-image">
-                                                <img src="{{ asset('public/front/image/products/product-1.jpg') }}" alt="">
-                                            </a>
-                                            <div class="hover-btns">
-                                                <a href="cart.html" class="single-btn">
-                                                    <i class="fas fa-shopping-basket"></i>
-                                                </a>
-                                                <a href="wishlist.html" class="single-btn">
-                                                    <i class="fas fa-heart"></i>
-                                                </a>
-                                                <a href="compare.html" class="single-btn">
-                                                    <i class="fas fa-random"></i>
-                                                </a>
-                                                <a href="#" data-toggle="modal" data-target="#quickModal"
-                                                    class="single-btn">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="price-block">
-                                        <span class="price">£51.20</span>
-                                        <del class="price-old">£51.20</del>
-                                        <span class="price-discount">20%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-slide">
-                            <div class="product-card">
-                                <div class="product-header">
-                                    <a href="" class="author">
-                                        Wpple
-                                    </a>
-                                    <h3><a href="product-details.html">3 Ways Create Better BOOK With</a></h3>
-                                </div>
-                                <div class="product-card--body">
-                                    <div class="card-image">
-                                        <img src="{{ asset('public/front/image/products/product-3.jpg') }}" alt="">
-                                        <div class="hover-contents">
-                                            <a href="product-details.html" class="hover-image">
-                                                <img src="{{ asset('public/front/image/products/product-2.jpg') }}" alt="">
-                                            </a>
-                                            <div class="hover-btns">
-                                                <a href="cart.html" class="single-btn">
-                                                    <i class="fas fa-shopping-basket"></i>
-                                                </a>
-                                                <a href="wishlist.html" class="single-btn">
-                                                    <i class="fas fa-heart"></i>
-                                                </a>
-                                                <a href="compare.html" class="single-btn">
-                                                    <i class="fas fa-random"></i>
-                                                </a>
-                                                <a href="#" data-toggle="modal" data-target="#quickModal"
-                                                    class="single-btn">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="price-block">
-                                        <span class="price">£51.20</span>
-                                        <del class="price-old">£51.20</del>
-                                        <span class="price-discount">20%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-slide">
-                            <div class="product-card">
-                                <div class="product-header">
-                                    <a href="" class="author">
-                                        Epple
-                                    </a>
-                                    <h3><a href="product-details.html">What You Can Learn From Bill Gates</a>
-                                    </h3>
-                                </div>
-                                <div class="product-card--body">
-                                    <div class="card-image">
-                                        <img src="{{ asset('public/front/image/products/product-5.jpg') }}" alt="">
-                                        <div class="hover-contents">
-                                            <a href="product-details.html" class="hover-image">
-                                                <img src="{{ asset('public/front/image/products/product-4.jpg') }}" alt="">
-                                            </a>
-                                            <div class="hover-btns">
-                                                <a href="cart.html" class="single-btn">
-                                                    <i class="fas fa-shopping-basket"></i>
-                                                </a>
-                                                <a href="wishlist.html" class="single-btn">
-                                                    <i class="fas fa-heart"></i>
-                                                </a>
-                                                <a href="compare.html" class="single-btn">
-                                                    <i class="fas fa-random"></i>
-                                                </a>
-                                                <a href="#" data-toggle="modal" data-target="#quickModal"
-                                                    class="single-btn">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="price-block">
-                                        <span class="price">£51.20</span>
-                                        <del class="price-old">£51.20</del>
-                                        <span class="price-discount">20%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-slide">
-                            <div class="product-card">
-                                <div class="product-header">
-                                    <a href="" class="author">
-                                        Hpple
-                                    </a>
-                                    <h3><a href="product-details.html">a Half Very Simple Things You To</a></h3>
-                                </div>
-                                <div class="product-card--body">
-                                    <div class="card-image">
-                                        <img src="{{ asset('public/front/image/products/product-6.jpg') }}" alt="">
-                                        <div class="hover-contents">
-                                            <a href="product-details.html" class="hover-image">
-                                                <img src="{{ asset('public/front/image/products/product-4.jpg') }}" alt="">
-                                            </a>
-                                            <div class="hover-btns">
-                                                <a href="cart.html" class="single-btn">
-                                                    <i class="fas fa-shopping-basket"></i>
-                                                </a>
-                                                <a href="wishlist.html" class="single-btn">
-                                                    <i class="fas fa-heart"></i>
-                                                </a>
-                                                <a href="compare.html" class="single-btn">
-                                                    <i class="fas fa-random"></i>
-                                                </a>
-                                                <a href="#" data-toggle="modal" data-target="#quickModal"
-                                                    class="single-btn">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="price-block">
-                                        <span class="price">£51.20</span>
-                                        <del class="price-old">£51.20</del>
-                                        <span class="price-discount">20%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
+
                     </div>
                 </div>
             </section>
@@ -499,19 +333,19 @@
               "asNavFor": ".product-slider-nav"
               }'>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-1.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-1.jpg') }}" alt="">
                                         </div>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-2.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-2.jpg') }}" alt="">
                                         </div>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-3.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-3.jpg') }}" alt="">
                                         </div>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-4.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-4.jpg') }}" alt="">
                                         </div>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-5.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-5.jpg') }}" alt="">
                                         </div>
                                     </div>
                                     <!-- Product Details Slider Nav -->
@@ -528,19 +362,19 @@
               "focusOnSelect": true
               }'>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-1.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-1.jpg') }}" alt="">
                                         </div>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-2.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-2.jpg') }}" alt="">
                                         </div>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-3.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-3.jpg') }}" alt="">
                                         </div>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-4.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-4.jpg') }}" alt="">
                                         </div>
                                         <div class="single-slide">
-                                            <img src="{{ asset('image/public/front/products/product-details-5.jpg') }}" alt="">
+                                            <img src="{{ asset('public/front/image/products/product-details-5.jpg') }}" alt="">
                                         </div>
                                     </div>
                                 </div>

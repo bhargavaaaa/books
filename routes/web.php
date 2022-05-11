@@ -1,13 +1,22 @@
 <?php
 
-use App\Http\Controllers\PublicationController;
-use App\Http\Controllers\Admin\BoardController;
+// use App\Http\Controllers\Admin\PublicationController;
+// use App\Http\Controllers\Admin\BoardController;
+// use App\Http\Controllers\Admin\ProductController;
+// use App\Http\Controllers\Admin\CategoryController;
+// use App\Http\Controllers\Admin\CMSPageController;
+// use App\Http\Controllers\Admin\ContactUsController;
+// use App\Http\Controllers\Admin\OrdersController;
+// use App\Http\Controllers\Admin\StandardController;
+// use App\Http\Controllers\Admin\SchoolController;
+
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CMSPageController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\HomeBanner;
 use App\Http\Controllers\Admin\OrdersController;
+use App\Http\Controllers\Admin\ReturnController;
 use App\Http\Controllers\Admin\StandardController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\SchoolController;
@@ -20,9 +29,6 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
 |
 */
 
@@ -51,11 +57,23 @@ Route::view('/login-register','front.login-register');
 Route::view('/my-account','front.my-account');
 Route::view('/faq','front.faq');
 Route::view('/order-details','front.order-details');
-Route::view('/product-details-affiliate','front.product-details-affiliate');
 Route::view('/product-details','front.product-details');
+Route::view('/product-details-affiliate','front.product-details-affiliate');
 Route::view('/shop-grid','front.shop-grid');
-Route::view('/shop-list','front.shop-list');
 Route::view('/wishlist','front.wishlist');
+Route::view('/shop-list','front.shop-list');
+
+
+Route::group(['prefix' => '/'], function () {
+    Route::get('/', function () {return view('welcome');})->name('site.home');
+
+    Route::get('/product',[ProductController::class,'index']);
+    Route::get('/product_detail/{id}',[ProductController::class,'product_detail'])->name('product_detail');
+
+    Route::view('/product-details','front.product-details');
+});
+
+
 
 
 Route::group(['prefix' => 'admin'], function () {
@@ -101,99 +119,112 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     /* Route For Board */
 
     Route::group(['prefix' => 'board'], function () {
-        Route::get('/', [BoardController::class, 'index'])->name('board.index')->middleware("permission:view.board");
-        Route::get('/getBoardData', [BoardController::class, 'getBoardData'])->name('board.getBoardData')->middleware("permission:view.board");
-        Route::get('/create', [BoardController::class, 'create'])->name('board.create')->middleware("permission:create.board");
-        Route::post('/store', [BoardController::class, 'store'])->name('board.store')->middleware("permission:create.board");
-        Route::get('/edit/{id}', [BoardController::class, 'edit'])->name('board.edit')->middleware("permission:edit.board");
-        Route::put('/{id}', [BoardController::class, 'update'])->name('board.update')->middleware("permission:edit.board");
-        Route::get('/delete/{id}', [BoardController::class, 'delete'])->name('board.delete')->middleware("permission:delete.board");
-        Route::post('/checkBoardName', [BoardController::class, 'checkBoardName'])->name('board.checkBoardName');
-        Route::get('/boardActiveInactive/{id}', [BoardController::class, 'boardActiveInactive'])->name('board.activeInactive')->middleware("permission:activeinactive.board");
+        Route::get('/', [App\Http\Controllers\Admin\BoardController::class, 'index'])->name('board.index')->middleware("permission:view.board");
+        Route::get('/getBoardData', [App\Http\Controllers\Admin\BoardController::class, 'getBoardData'])->name('board.getBoardData')->middleware("permission:view.board");
+        Route::get('/create', [App\Http\Controllers\Admin\BoardController::class, 'create'])->name('board.create')->middleware("permission:create.board");
+        Route::post('/store', [App\Http\Controllers\Admin\BoardController::class, 'store'])->name('board.store')->middleware("permission:create.board");
+        Route::get('/edit/{id}', [App\Http\Controllers\Admin\BoardController::class, 'edit'])->name('board.edit')->middleware("permission:edit.board");
+        Route::put('/{id}', [App\Http\Controllers\Admin\BoardController::class, 'update'])->name('board.update')->middleware("permission:edit.board");
+        Route::get('/delete/{id}', [App\Http\Controllers\Admin\BoardController::class, 'delete'])->name('board.delete')->middleware("permission:delete.board");
+        Route::post('/checkBoardName', [App\Http\Controllers\Admin\BoardController::class, 'checkBoardName'])->name('board.checkBoardName');
+        Route::get('/boardActiveInactive/{id}', [App\Http\Controllers\Admin\BoardController::class, 'boardActiveInactive'])->name('board.activeInactive')->middleware("permission:activeinactive.board");
     });
 
     /** Routes For Publication */
     Route::prefix('publication')->group(function () {
-        Route::get('/', [PublicationController::class, 'index'])->name('publication.index')->middleware("permission:view.publications");
-        Route::get('/getData', [PublicationController::class, 'getData'])->name('publication.getData')->middleware("permission:view.publications");
-        Route::get('/create', [PublicationController::class, 'create'])->name('publication.create')->middleware("permission:create.publications");
-        Route::post('/store', [PublicationController::class, 'store'])->name('publication.store')->middleware("permission:create.publications");
-        Route::get('/edit/{id}', [PublicationController::class, 'edit'])->name('publication.edit')->middleware("permission:edit.publications");
-        Route::post('/update/{id}', [PublicationController::class, 'update'])->name('publication.update')->middleware("permission:edit.publications");
-        Route::post('/delete', [PublicationController::class, 'delete'])->name('publication.delete')->middleware("permission:delete.publications");
-        Route::get('/ActiveInactive/{id}', [PublicationController::class, 'ActiveInactive'])->name('publication.activeInactive')->middleware("permission:activeinactive.publications");
+        Route::get('/', [App\Http\Controllers\Admin\PublicationController::class, 'index'])->name('publication.index')->middleware("permission:view.publications");
+        Route::get('/getData', [App\Http\Controllers\Admin\PublicationController::class, 'getData'])->name('publication.getData')->middleware("permission:view.publications");
+        Route::get('/create', [App\Http\Controllers\Admin\PublicationController::class, 'create'])->name('publication.create')->middleware("permission:create.publications");
+        Route::post('/store', [App\Http\Controllers\Admin\PublicationController::class, 'store'])->name('publication.store')->middleware("permission:create.publications");
+        Route::get('/edit/{id}', [App\Http\Controllers\Admin\PublicationController::class, 'edit'])->name('publication.edit')->middleware("permission:edit.publications");
+        Route::post('/update/{id}', [App\Http\Controllers\Admin\PublicationController::class, 'update'])->name('publication.update')->middleware("permission:edit.publications");
+        Route::post('/delete', [App\Http\Controllers\Admin\PublicationController::class, 'delete'])->name('publication.delete')->middleware("permission:delete.publications");
+        Route::get('/ActiveInactive/{id}', [App\Http\Controllers\Admin\PublicationController::class, 'ActiveInactive'])->name('publication.activeInactive')->middleware("permission:activeinactive.publications");
     });
 
     Route::prefix('school')->group(function () {
-        Route::get('/', [SchoolController::class, 'index'])->name('school.index')->middleware("permission:view.schools");
-        Route::get('/getData', [SchoolController::class, 'getData'])->name('school.getData')->middleware("permission:view.schools");
-        Route::get('/create', [SchoolController::class, 'create'])->name('school.create')->middleware("permission:create.schools");
-        Route::post('/store', [SchoolController::class, 'store'])->name('school.store')->middleware("permission:create.schools");
-        Route::get('/edit/{id}', [SchoolController::class, 'edit'])->name('school.edit')->middleware("permission:edit.schools");
-        Route::post('/update/{id}', [SchoolController::class, 'update'])->name('school.update')->middleware("permission:edit.schools");
-        Route::post('/delete', [SchoolController::class, 'delete'])->name('school.delete')->middleware("permission:delete.schools");
-        Route::get('/ActiveInactive/{id}', [SchoolController::class, 'ActiveInactive'])->name('school.activeInactive')->middleware("permission:activeinactive.schools");
+        Route::get('/', [App\Http\Controllers\Admin\SchoolController::class, 'index'])->name('school.index')->middleware("permission:view.schools");
+        Route::get('/getData', [App\Http\Controllers\Admin\SchoolController::class, 'getData'])->name('school.getData')->middleware("permission:view.schools");
+        Route::get('/create', [App\Http\Controllers\Admin\SchoolController::class, 'create'])->name('school.create')->middleware("permission:create.schools");
+        Route::post('/store', [App\Http\Controllers\Admin\SchoolController::class, 'store'])->name('school.store')->middleware("permission:create.schools");
+        Route::get('/edit/{id}', [App\Http\Controllers\Admin\SchoolController::class, 'edit'])->name('school.edit')->middleware("permission:edit.schools");
+        Route::post('/update/{id}', [App\Http\Controllers\Admin\SchoolController::class, 'update'])->name('school.update')->middleware("permission:edit.schools");
+        Route::post('/delete', [App\Http\Controllers\Admin\SchoolController::class, 'delete'])->name('school.delete')->middleware("permission:delete.schools");
+        Route::get('/ActiveInactive/{id}', [App\Http\Controllers\Admin\SchoolController::class, 'ActiveInactive'])->name('school.activeInactive')->middleware("permission:activeinactive.schools");
     });
 
     Route::prefix('standard')->group(function () {
-        Route::get('/', [StandardController::class, 'index'])->name('standard.index');
-        Route::get('/getStandardData', [StandardController::class, 'getStandardData'])->name('standard.getStandardData');
-        Route::get('/create', [StandardController::class, 'create'])->name('standard.create');
-        Route::post('/store', [StandardController::class, 'store'])->name('standard.store');
-        Route::get('/edit/{id}', [StandardController::class,'edit'])->name('standard.edit');
-        Route::put('/{id}', [StandardController::class, 'update'])->name('standard.update');
-        Route::get('/delete/{id}',[StandardController::class, 'delete'])->name('standard.delete');
-        Route::get('/standardActiveInactive/{id}',[StandardController::class, 'standardActiveInactive'])->name('standard.activeInactive');
+        Route::get('/', [App\Http\Controllers\Admin\StandardController::class, 'index'])->name('standard.index');
+        Route::get('/getStandardData', [App\Http\Controllers\Admin\StandardController::class, 'getStandardData'])->name('standard.getStandardData');
+        Route::get('/create', [App\Http\Controllers\Admin\StandardController::class, 'create'])->name('standard.create');
+        Route::post('/store', [App\Http\Controllers\Admin\StandardController::class, 'store'])->name('standard.store');
+        Route::get('/edit/{id}', [App\Http\Controllers\Admin\StandardController::class,'edit'])->name('standard.edit');
+        Route::put('/{id}', [App\Http\Controllers\Admin\StandardController::class, 'update'])->name('standard.update');
+        Route::get('/delete/{id}',[App\Http\Controllers\Admin\StandardController::class, 'delete'])->name('standard.delete');
+        Route::get('/standardActiveInactive/{id}',[App\Http\Controllers\Admin\StandardController::class, 'standardActiveInactive'])->name('standard.activeInactive');
     });
 
     Route::prefix('product')->group(function () {
-        Route::get('/', [ProductController::class, 'index'])->name('product.index')->middleware("permission:view.products");
-        Route::get('/getData', [ProductController::class, 'getData'])->name('product.getData')->middleware("permission:view.products");
-        Route::get('/create', [ProductController::class, 'create'])->name('product.create')->middleware("permission:create.products");
-        Route::post('/store', [ProductController::class, 'store'])->name('product.store');
-        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit')->middleware("permission:edit.products");
-        Route::post('/update/{id}', [ProductController::class, 'update'])->name('product.update');
-        Route::post('/delete', [ProductController::class, 'delete'])->name('product.delete')->middleware("permission:delete.products");
-        Route::post('/checkName', [ProductController::class, 'checkName'])->name('product.checkName');
-        Route::get('/ActiveInactive/{id}', [ProductController::class, 'ActiveInactive'])->name('product.activeInactive')->middleware("permission:activeinactive.products");
+        Route::get('/', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('product.index')->middleware("permission:view.products");
+        Route::get('/getData', [App\Http\Controllers\Admin\ProductController::class, 'getData'])->name('product.getData')->middleware("permission:view.products");
+        Route::get('/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('product.create')->middleware("permission:create.products");
+        Route::post('/store', [App\Http\Controllers\Admin\ProductController::class, 'store'])->name('product.store');
+        Route::get('/edit/{id}', [App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('product.edit')->middleware("permission:edit.products");
+        Route::post('/update/{id}', [App\Http\Controllers\Admin\ProductController::class, 'update'])->name('product.update');
+        Route::post('/delete', [App\Http\Controllers\Admin\ProductController::class, 'delete'])->name('product.delete')->middleware("permission:delete.products");
+        Route::post('/checkName', [App\Http\Controllers\Admin\ProductController::class, 'checkName'])->name('product.checkName');
+        Route::get('/ActiveInactive/{id}', [App\Http\Controllers\Admin\ProductController::class, 'ActiveInactive'])->name('product.activeInactive')->middleware("permission:activeinactive.products");
     });
 
     Route::prefix('orders')->group(function () {
-        Route::get('/', [OrdersController::class, 'index'])->name('orders.index');
-        Route::post('getReceivedOrdersData', [OrdersController::class, 'getReceivedOrdersData'])->name('orders.getReceivedOrdersData');
-        Route::post('getShippedOrdersData', [OrdersController::class, 'getShippedOrdersData'])->name('orders.getShippedOrdersData');
-        Route::post('getDeliveredOrdersData', [OrdersController::class, 'getDeliveredOrdersData'])->name('orders.getDeliveredOrdersData');
-        Route::post('getCancelledOrdersData', [OrdersController::class, 'getCancelledOrdersData'])->name('orders.getCancelledOrdersData');
-        Route::post('getRejectedOrdersData', [OrdersController::class, 'getRejectedOrdersData'])->name('orders.getRejectedOrdersData');
-        Route::get('show/{id}', [OrdersController::class, 'show'])->name('orders.show');
-        Route::post('state/change', [OrdersController::class, 'stateChange'])->name('orders.state.change');
+        Route::get('/', [App\Http\Controllers\Admin\OrdersController::class, 'index'])->name('orders.index')->middleware("permission:view.orders");
+        Route::post('getReceivedOrdersData', [App\Http\Controllers\Admin\OrdersController::class, 'getReceivedOrdersData'])->name('orders.getReceivedOrdersData')->middleware("permission:view.orders");
+        Route::post('getShippedOrdersData', [App\Http\Controllers\Admin\OrdersController::class, 'getShippedOrdersData'])->name('orders.getShippedOrdersData')->middleware("permission:view.orders");
+        Route::post('getDeliveredOrdersData', [App\Http\Controllers\Admin\OrdersController::class, 'getDeliveredOrdersData'])->name('orders.getDeliveredOrdersData')->middleware("permission:view.orders");
+        Route::post('getCancelledOrdersData', [App\Http\Controllers\Admin\OrdersController::class, 'getCancelledOrdersData'])->name('orders.getCancelledOrdersData')->middleware("permission:view.orders");
+        Route::post('getRejectedOrdersData', [App\Http\Controllers\Admin\OrdersController::class, 'getRejectedOrdersData'])->name('orders.getRejectedOrdersData')->middleware("permission:view.orders");
+        Route::get('show/{id}', [App\Http\Controllers\Admin\OrdersController::class, 'show'])->name('orders.show')->middleware("permission:view.orders");
+        Route::post('state/change', [App\Http\Controllers\Admin\OrdersController::class, 'stateChange'])->name('orders.state.change')->middleware("permission:edit.orders");
+    });
+
+    Route::prefix('return-orders')->group(function () {
+        Route::get('/', [ReturnController::class, 'index'])->name('return.orders.index');
+        Route::post('getRequestRegisteredData', [ReturnController::class, 'getRequestRegisteredData'])->name('return.orders.getRequestRegisteredData');
+        Route::post('getRequestAcceptedData', [ReturnController::class, 'getRequestAcceptedData'])->name('return.orders.getRequestAcceptedData');
+        Route::post('getRequestRejectedData', [ReturnController::class, 'getRequestRejectedData'])->name('return.orders.getRequestRejectedData');
+        Route::post('getReturnTakenData', [ReturnController::class, 'getReturnTakenData'])->name('return.orders.getReturnTakenData');
+        Route::post('getReturnAcceptedData', [ReturnController::class, 'getReturnAcceptedData'])->name('return.orders.getReturnAcceptedData');
+        Route::post('getReturnRejectedData', [ReturnController::class, 'getReturnRejectedData'])->name('return.orders.getReturnRejectedData');
+        Route::post('getCashbackGivenData', [ReturnController::class, 'getCashbackGivenData'])->name('return.orders.getCashbackGivenData');
+        Route::post('getReplacementGivenData', [ReturnController::class, 'getReplacementGivenData'])->name('return.orders.getReplacementGivenData');
+        Route::post('state/change', [ReturnController::class, 'stateChange'])->name('return.orders.state.change');
     });
 
     Route::group(['prefix' => 'category'], function(){
-        Route::get('/', [CategoryController::class, 'index'])->name('category.index')->middleware("permission:view.category");
-        Route::get('/getCategoryData', [CategoryController::class, 'getCategoryData'])->name('category.getCategoryData')->middleware("permission:view.category");
-        Route::get('/create', [CategoryController::class, 'create'])->name('category.create')->middleware("permission:create.category");
-        Route::post('/store', [CategoryController::class, 'store'])->name('category.store')->middleware("permission:create.category");
-        Route::get('/edit/{id}', [CategoryController::class,'edit'])->name('category.edit')->middleware("permission:edit.category");
-        Route::put('/{id}', [CategoryController::class, 'update'])->name('category.update')->middleware("permission:edit.category");
-        Route::get('/delete/{id}',[CategoryController::class, 'delete'])->name('category.delete')->middleware("permission:delete.category");
-        Route::post('/checkName',[CategoryController::class, 'checkName'])->name('category.checkName');
-        Route::get('/categoryActiveInactive/{id}',[CategoryController::class, 'categoryActiveInactive'])->name('category.activeInactive')->middleware("permission:activeinactive.category");
+        Route::get('/', [App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('category.index')->middleware("permission:view.category");
+        Route::get('/getCategoryData', [App\Http\Controllers\Admin\CategoryController::class, 'getCategoryData'])->name('category.getCategoryData')->middleware("permission:view.category");
+        Route::get('/create', [App\Http\Controllers\Admin\CategoryController::class, 'create'])->name('category.create')->middleware("permission:create.category");
+        Route::post('/store', [App\Http\Controllers\Admin\CategoryController::class, 'store'])->name('category.store')->middleware("permission:create.category");
+        Route::get('/edit/{id}', [App\Http\Controllers\Admin\CategoryController::class,'edit'])->name('category.edit')->middleware("permission:edit.category");
+        Route::put('/{id}', [App\Http\Controllers\Admin\CategoryController::class, 'update'])->name('category.update')->middleware("permission:edit.category");
+        Route::get('/delete/{id}',[App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('category.delete')->middleware("permission:delete.category");
+        Route::post('/checkName',[App\Http\Controllers\Admin\CategoryController::class, 'checkName'])->name('category.checkName');
+        Route::get('/categoryActiveInactive/{id}',[App\Http\Controllers\Admin\CategoryController::class, 'categoryActiveInactive'])->name('category.activeInactive')->middleware("permission:activeinactive.category");
     });
 
     /* Routes For ContactUs */
-    Route::get('contact_us',[ContactUsController::class, 'index'])->name('contact_us.index');
-    Route::get('/getContactUsData',[ContactUsController::class, 'getContactUsData'])->name('contact_us.getContactUsData');
+    Route::get('contact_us',[App\Http\Controllers\Admin\ContactUsController::class, 'index'])->name('contact_us.index');
+    Route::get('/getContactUsData',[App\Http\Controllers\Admin\ContactUsController::class, 'getContactUsData'])->name('contact_us.getContactUsData');
 
     /* Routes Fro CMS Pages */
     Route::group(['prefix' => 'cms_page'], function() {
-        Route::get('/', [CMSPageController::class, 'index'])->name('cms_page.index');
-        Route::get('/getCmsPageData', [CMSPageController::class, 'getCmsPageData'])->name('cms_page.getCmsPageData');
-        Route::get('/create', [CMSPageController::class, 'create'])->name('cms_page.create');
-        Route::post('/store', [CMSPageController::class, 'store'])->name('cms_page.store');
-        Route::get('/edit/{id}', [CMSPageController::class, 'edit'])->name('cms_page.edit');
-        Route::put('/{id}', [CMSPageController::class, 'update'])->name('cms_page.update');
-        Route::get('/delete/{id}', [CMSPageController::class, 'delete'])->name('cms_page.delete');
+        Route::get('/', [App\Http\Controllers\Admin\CMSPageController::class, 'index'])->name('cms_page.index');
+        Route::get('/getCmsPageData', [App\Http\Controllers\Admin\CMSPageController::class, 'getCmsPageData'])->name('cms_page.getCmsPageData');
+        Route::get('/create', [App\Http\Controllers\Admin\CMSPageController::class, 'create'])->name('cms_page.create');
+        Route::post('/store', [App\Http\Controllers\Admin\CMSPageController::class, 'store'])->name('cms_page.store');
+        Route::get('/edit/{id}', [App\Http\Controllers\Admin\CMSPageController::class, 'edit'])->name('cms_page.edit');
+        Route::put('/{id}', [App\Http\Controllers\Admin\CMSPageController::class, 'update'])->name('cms_page.update');
+        Route::get('/delete/{id}', [App\Http\Controllers\Admin\CMSPageController::class, 'delete'])->name('cms_page.delete');
     });
 
     Route::prefix('banner')->group(function () {
