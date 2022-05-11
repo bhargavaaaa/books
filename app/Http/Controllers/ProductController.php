@@ -105,8 +105,8 @@ class ProductController extends Controller
                 $editUrl = route($this->route . '.edit', encrypt($row->id));
                 $deleteId = encrypt($row->id);
 
-                $activeUrl = route('school.activeInactive' ,encrypt($row->id));
-                $deactiveUrl = route('school.activeInactive',encrypt($row->id));
+                $activeUrl = route('product.activeInactive' ,encrypt($row->id));
+                $deactiveUrl = route('product.activeInactive',encrypt($row->id));
 
                 $action = '';
                 if (auth()->user()->hasPermission('edit.schools')) {

@@ -22,4 +22,13 @@ class Category extends Model
     public function school(){
         return $this->belongsToMany(School::class,'category_schools')->withTimestamps();
     }
+
+    public function product()
+    {
+        return $this->belongsToMany(Product::class,'category_products');
+    }
+
+    public function scopeActive($q) {
+        return $q->where('is_active',1);
+    }
 }
