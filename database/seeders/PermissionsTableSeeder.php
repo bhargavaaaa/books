@@ -219,6 +219,28 @@ class PermissionsTableSeeder extends Seeder
             Permission::create(['name' => 'Active/Inactive orders', 'slug' => 'activeinactive.orders', 'description' => 'Can Activate or deactivate orders', 'model' => 'Order',]);
         }
 
-        /* permission for product module end */
+        /* permission for order module end */
+
+        /* permission for returnorder module start */
+        if (Permission::where('name', '=', 'Create Return Orders')->first() === null) {
+            Permission::create(['name' => 'Create Return Orders', 'slug' => 'create.returnorders', 'description' => 'Can Add Return Orders', 'model' => 'ReturnOrder',]);
+        }
+
+        if (Permission::where('name', '=', 'View Return Orders')->first() === null) {
+            Permission::create(['name' => 'View Return Orders', 'slug' => 'view.returnorders', 'description' => 'Can view Return Orders', 'model' => 'ReturnOrder',]);
+        }
+
+        if (Permission::where('name', '=', 'Edit Return Orders')->first() === null) {
+            Permission::create(['name' => 'Edit Return Orders', 'slug' => 'edit.returnorders', 'description' => 'Can edit Return Orders', 'model' => 'ReturnOrder',]);
+        }
+
+        if (Permission::where('name', '=', 'Delete Return Orders')->first() === null) {
+            Permission::create(['name' => 'Delete Return Orders', 'slug' => 'delete.returnorders', 'description' => 'Can Delete Return Orders', 'model' => 'ReturnOrder',]);
+        }
+        if (Permission::where('name', '=', 'Active/Inactive Return Orders')->first() === null) {
+            Permission::create(['name' => 'Active/Inactive Return Orders', 'slug' => 'activeinactive.returnorders', 'description' => 'Can Activate or deactivate Return Orders', 'model' => 'ReturnOrder',]);
+        }
+
+        /* permission for order module end */
     }
 }

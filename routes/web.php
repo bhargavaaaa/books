@@ -69,6 +69,7 @@ Route::group(['prefix' => '/'], function () {
 
     Route::get('/product',[ProductController::class,'index']);
     Route::get('/product_detail/{id}',[ProductController::class,'product_detail'])->name('product_detail');
+    Route::post('/relatedproduct_detail',[ProductController::class,'relatedproduct_detail'])->name('relatedproduct_detail');
 
     Route::view('/product-details','front.product-details');
 });
@@ -188,16 +189,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     });
 
     Route::prefix('return-orders')->group(function () {
-        Route::get('/', [ReturnController::class, 'index'])->name('return.orders.index');
-        Route::post('getRequestRegisteredData', [ReturnController::class, 'getRequestRegisteredData'])->name('return.orders.getRequestRegisteredData');
-        Route::post('getRequestAcceptedData', [ReturnController::class, 'getRequestAcceptedData'])->name('return.orders.getRequestAcceptedData');
-        Route::post('getRequestRejectedData', [ReturnController::class, 'getRequestRejectedData'])->name('return.orders.getRequestRejectedData');
-        Route::post('getReturnTakenData', [ReturnController::class, 'getReturnTakenData'])->name('return.orders.getReturnTakenData');
-        Route::post('getReturnAcceptedData', [ReturnController::class, 'getReturnAcceptedData'])->name('return.orders.getReturnAcceptedData');
-        Route::post('getReturnRejectedData', [ReturnController::class, 'getReturnRejectedData'])->name('return.orders.getReturnRejectedData');
-        Route::post('getCashbackGivenData', [ReturnController::class, 'getCashbackGivenData'])->name('return.orders.getCashbackGivenData');
-        Route::post('getReplacementGivenData', [ReturnController::class, 'getReplacementGivenData'])->name('return.orders.getReplacementGivenData');
-        Route::post('state/change', [ReturnController::class, 'stateChange'])->name('return.orders.state.change');
+        Route::get('/', [ReturnController::class, 'index'])->name('return.orders.index')->middleware("permission:view.returnorders");
+        Route::post('getRequestRegisteredData', [ReturnController::class, 'getRequestRegisteredData'])->name('return.orders.getRequestRegisteredData')->middleware("permission:view.returnorders");
+        Route::post('getRequestAcceptedData', [ReturnController::class, 'getRequestAcceptedData'])->name('return.orders.getRequestAcceptedData')->middleware("permission:view.returnorders");
+        Route::post('getRequestRejectedData', [ReturnController::class, 'getRequestRejectedData'])->name('return.orders.getRequestRejectedData')->middleware("permission:view.returnorders");
+        Route::post('getReturnTakenData', [ReturnController::class, 'getReturnTakenData'])->name('return.orders.getReturnTakenData')->middleware("permission:view.returnorders");
+        Route::post('getReturnAcceptedData', [ReturnController::class, 'getReturnAcceptedData'])->name('return.orders.getReturnAcceptedData')->middleware("permission:view.returnorders");
+        Route::post('getReturnRejectedData', [ReturnController::class, 'getReturnRejectedData'])->name('return.orders.getReturnRejectedData')->middleware("permission:view.returnorders");
+        Route::post('getCashbackGivenData', [ReturnController::class, 'getCashbackGivenData'])->name('return.orders.getCashbackGivenData')->middleware("permission:view.returnorders");
+        Route::post('getReplacementGivenData', [ReturnController::class, 'getReplacementGivenData'])->name('return.orders.getReplacementGivenData')->middleware("permission:view.returnorders");
+        Route::post('state/change', [ReturnController::class, 'stateChange'])->name('return.orders.state.change')->middleware('permission:create.returnorders');
     });
 
     Route::group(['prefix' => 'category'], function(){
