@@ -101,7 +101,7 @@
                                     <div class="product-card">
                                         <div class="product-header">
                                             <a href="" class="author">
-                                                Lpple
+                                                {{ isset($product->publication) ? $product->publication[0]->publication_name : '' }}
                                             </a>
                                             <h3><a href="product-details.html">{{ $product->product_name }}</a></h3>
                                         </div>
@@ -131,7 +131,7 @@
                                             </div>
                                             <div class="price-block">
                                                 <span class="price">₹ {{ $product->sale_price }}</span>
-                                                <del class="price-old">{{ isset($product->cutout_price) ? $product->cutout_price : '₹ 0' }}</del>
+                                                <del class="price-old">₹ {{ isset($product->cutout_price) ? $product->cutout_price : '₹ 0' }}</del>
                                                 {{-- <span class="price-discount">20%</span> --}}
                                             </div>
                                         </div>

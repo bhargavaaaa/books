@@ -127,11 +127,11 @@
                 <div class="main-navigation flex-lg-right">
                     <ul class="main-menu menu-right li-last-0">
                         <li class="menu-item">
-                            <a href="javascript:void(0)">Home </a>
+                            <a href="{{ url('/') }}">Home </a>
                         </li>
                         <!-- Shop -->
                         <li class="menu-item">
-                            <a href="javascript:void(0)">shop </a>
+                            <a href="{{ route('front.product') }}">shop </a>
                         </li>
                         <!-- Pages -->
                         {{-- <li class="menu-item has-children">
@@ -150,7 +150,7 @@
                             </ul>
                         </li> --}}
                         <li class="menu-item">
-                            <a href="contact.html">Contact</a>
+                            <a href="{{ route('contactUs') }}">Contact</a>
                         </li>
                         <li class="menu-item has-children dropdown-trigger language-dropdown">
                             <a href="">

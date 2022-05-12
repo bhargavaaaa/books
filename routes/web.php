@@ -46,14 +46,13 @@ Route::get('/clear-cache', function () {
 //     return view('welcome');
 // })->name('site.home');
 
-Route::get('/', [MainController::class, 'home'])->name('site.home');
 
 Route::view('/cart','front.cart');
 Route::view('/checkout','front.checkout');
 Route::view('/compare','front.compare');
-Route::view('/contact-2','front.contact-2');
-Route::view('/contact','front.contact');
-Route::view('/login-register','front.login-register');
+// Route::view('/contact-2','front.contact-2');
+Route::view('/contact','front.contact')->name('contactUs');
+Route::view('/login-register','front.login-register')->name('front.login-register');
 Route::view('/my-account','front.my-account');
 Route::view('/faq','front.faq');
 Route::view('/order-details','front.order-details');
@@ -65,9 +64,10 @@ Route::view('/shop-list','front.shop-list');
 
 
 Route::group(['prefix' => '/'], function () {
-    Route::get('/', function () {return view('welcome');})->name('site.home');
+    // Route::get('/', function () {return view('welcome');})->name('site.home');
+    Route::get('/', [MainController::class, 'home'])->name('site.home');
 
-    Route::get('/product',[ProductController::class,'index']);
+    Route::get('/product',[ProductController::class,'index'])->name('front.product');
     Route::get('/product_detail/{id}',[ProductController::class,'product_detail'])->name('product_detail');
     Route::post('/relatedproduct_detail',[ProductController::class,'relatedproduct_detail'])->name('relatedproduct_detail');
 
