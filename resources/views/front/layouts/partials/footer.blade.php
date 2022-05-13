@@ -15,7 +15,22 @@
             {"breakpoint":480, "settings": {"slidesToShow": 2} },
             {"breakpoint":320, "settings": {"slidesToShow": 1} }
         ]'>
-            <div class="single-slide">
+            @php
+                $publications = \App\Models\Publication::where('publication_photo', '!=', null)
+                    ->latest()
+                    ->take(8)
+                    ->get();
+            @endphp
+
+            @if (isset($publications))
+                @foreach ($publications as $publication)
+                    <div class="single-slide p-1">
+                        <img src="{{ asset('storage/app/publication/' . $publication->publication_photo) }}"
+                            alt="{{ $publication->publication_name }}" height="58" width="170">
+                    </div>
+                @endforeach
+            @endif
+            {{-- <div class="single-slide">
                 <img src="{{ asset('public/front/image/others/brand-1.jpg') }}" alt="">
             </div>
             <div class="single-slide">
@@ -38,7 +53,7 @@
             </div>
             <div class="single-slide">
                 <img src="{{ asset('public/front/image/others/brand-2.jpg') }}" alt="">
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>
@@ -51,13 +66,16 @@ Footer Area
             <div class=" col-xl-3 col-lg-4 col-sm-6">
                 <div class="single-footer pb--40">
                     <div class="brand-footer footer-title">
-                        <img src="{{ asset('public/front/image/logo--footer.png')}}" alt="">
+                        <img src="{{ asset('public/front/image/logo--footer.png') }}" alt="">
                     </div>
                     <div class="footer-contact">
-                        <p><span class="label">Address:</span><span class="text">Example Street 98, HH2 BacHa, New
+                        <p><span class="label">Address:</span><span class="text">Example Street 98,
+                                HH2 BacHa, New
                                 York, USA</span></p>
-                        <p><span class="label">Phone:</span><span class="text">+18088 234 5678</span></p>
-                        <p><span class="label">Email:</span><span class="text">suport@hastech.com</span></p>
+                        <p><span class="label">Phone:</span><span class="text">+18088 234 5678</span>
+                        </p>
+                        <p><span class="label">Email:</span><span
+                                class="text">suport@hastech.com</span></p>
                     </div>
                 </div>
             </div>
@@ -118,11 +136,13 @@ Footer Area
             <p class="copyright-heading">Suspendisse in auctor augue. Cras fermentum est ac fermentum tempor. Etiam
                 vel magna volutpat, posuere eros</p>
             <a href="#" class="payment-block">
-                <img src="{{ asset('public/front/image/icon/payment.png')}}" alt="">
+                <img src="{{ asset('public/front/image/icon/payment.png') }}" alt="">
             </a>
-            <p class="copyright-text">Copyright © 2019 <a href="#" class="author">Pustok</a>. All Right Reserved.
+            <p class="copyright-text">Copyright © 2019 <a href="#" class="author">Pustok</a>. All Right
+                Reserved.
                 <br>
-                Design By Pustok</p>
+                Design By Pustok
+            </p>
         </div>
     </div>
 </footer>

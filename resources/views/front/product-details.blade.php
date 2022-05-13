@@ -289,7 +289,8 @@
                                                 <a href="compare.html" class="single-btn">
                                                     <i class="fas fa-random"></i>
                                                 </a>
-                                                <a href="#" data-toggle="modal" data-target="#quickModal"
+                                                <a href="#" data-toggle="modal"
+                                                 {{-- data-target="#quickModal" --}}
                                                     data-id="{{ $related->id }}" class="single-btn viewRelated">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
@@ -437,7 +438,7 @@
 @endsection
 @section('script')
     <script>
-        $('body').on('click', '.viewRelated',function(){
+        $('body').on('click', '.viewRelated',function(e){
             related_product = $(this).data('id');
             $.ajax({
                 url: '{{ route("relatedproduct_detail") }}',
@@ -461,6 +462,8 @@
 
                     model.find('.product-details-article p').html(res['product']['product_desc']);
 
+                    $('#quickModal').modal({show:true});
+
                     model.find('.add-cart-btn a').attr('data-id',res['product']['id']);
                     model.find('.compare-wishlist-row .add-link:first').attr('data-id',res['product']['id']);
                     model.find('.compare-wishlist-row .add-link:last').attr('data-id',res['product']['id']);
@@ -472,6 +475,6 @@
                     // console.log(res['product']);
                 },
             });
-        });
+            });
     </script>
 @endsection

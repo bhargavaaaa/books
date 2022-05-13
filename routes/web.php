@@ -71,6 +71,7 @@ Route::group(['prefix' => '/'], function () {
     Route::get('/product_detail/{id}',[ProductController::class,'product_detail'])->name('product_detail');
     Route::post('/relatedproduct_detail',[ProductController::class,'relatedproduct_detail'])->name('relatedproduct_detail');
 
+    Route::post('/load_products',[ProductController::class,'load_products'])->name('load_products');
     Route::view('/product-details','front.product-details');
 });
 
