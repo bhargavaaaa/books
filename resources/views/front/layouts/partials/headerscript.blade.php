@@ -6,3 +6,9 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('public/front/css/plugins.css') }}" />
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('public/front/css/main.css') }}" />
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset('public/front/image/favicon.ico') }}">
+
+<style>
+    .remove-wishlist{
+        color:#62ab00 !important;
+    }
+</style>

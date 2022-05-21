@@ -131,14 +131,14 @@
                         </li>
                         <!-- Shop -->
                         <li class="menu-item">
-                            <a href="{{ route('front.product') }}">shop </a>
+                            <a href="{{ route('product') }}">shop </a>
                         </li>
                         <!-- Pages -->
                         {{-- <li class="menu-item has-children">
                             <a href="javascript:void(0)">Pages <i
                                     class="fas fa-chevron-down dropdown-arrow"></i></a>
                             <ul class="sub-menu">
-                                <li><a href="cart.html">Cart</a></li>
+                                <li><a href="{{ route('cart') }}">Cart</a></li>
                                 <li><a href="checkout.html">Checkout</a></li>
                                 <li><a href="compare.html">Compare</a></li>
                                 <li><a href="wishlist.html">Wishlist</a></li>
@@ -159,7 +159,7 @@
                         <ul class="dropdown-box">
                             <li> <a href="">My Account</a></li>
                             <li> <a href="">Order History</a></li>
-                            <li> <a href="">My Wishlist</a></li>
+                            <li> <a href="{{ route('wishlist') }}">My Wishlist</a></li>
                             <li> <a href="">Transactions</a></li>
                             <li> <a href="">Downloads</a></li>
                         </ul>

@@ -12,7 +12,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::with(['category', 'board', 'publication'])->where('is_active', 1)->orderBy('id','desc')->latest()->take(2)->get();
+        $products = Product::with(['category', 'board', 'publication'])->where('is_active', 1)->orderBy('id', 'desc')->latest()->take(2)->get();
         $productCount = Product::where('is_active', 1)->count();
         return view('front.products', compact('products', 'productCount'));
     }
@@ -21,11 +21,16 @@ class ProductController extends Controller
     {
         $id = decrypt($id);
         $product = Product::with(['category', 'board', 'publication'])->find($id);
-        $relatedProducts = Product::with(['category', 'board', 'publication'])->where('id', '!=', $product->id)
-            ->whereHas('category', function ($q) use ($product) {
+        $related = Product::with(['category', 'board', 'publication'])->where('id', '!=', $product->id);
+
+        if (isset($product->category) && count($product->category) > 0) {
+            $related->whereHas('category', function ($q) use ($product) {
                 $q->where('category_id', $product->category[0]->id);
-            })
-            ->where('is_active', 1)->get();
+            });
+        }
+
+        $relatedProducts = $related->where('is_active', 1)->take(5)->get();
+
 
         return view('front.product-details', compact('product', 'relatedProducts'));
     }
@@ -50,53 +55,50 @@ class ProductController extends Controller
         $res['categories'] = $categories;
         $res['publications'] = $publications;
 
-        return response()->json($res);
+        // return response()->json($res);
+        return view('front.modal', $res);
     }
 
-    public function load_products(Request $request){
+    public function load_products(Request $request)
+    {
         $page = $request->page;
         $sort_select = $request->sort_select;
 
-        if(isset($request->last_id) && $request->last_id != null){
+        if (isset($request->last_id) && $request->last_id != null) {
             $last_id = json_decode($request->last_id);
-        }else{
+        } else {
             $last_id = Product::latest()->take(1)->pluck('id');
             $last_id[0] = ($last_id[0] + 1);
         }
         $prev = $last_id;
 
-        if(isset($page) && isset($sort_select)){
-            if($sort_select == "default" ){
-                $products = Product::with(['category', 'board', 'publication'])->whereNotIn('id',$last_id)->where('is_active', 1)->orderBy('id','desc')->latest()->take(2)->get();
+        if (isset($page) && isset($sort_select)) {
+            if ($sort_select == "default") {
+                $products = Product::with(['category', 'board', 'publication'])->whereNotIn('id', $last_id)->where('is_active', 1)->orderBy('id', 'desc')->latest()->take(2)->get();
                 $productCount = Product::where('is_active', 1)->count();
+            } else if ($sort_select == "sort_A-Z") {
 
-            }else if($sort_select == "sort_A-Z"){
+                $products = Product::with(['category', 'board', 'publication'])->whereNotIn('id', $last_id)->where('is_active', 1)->orderBy('product_name', 'asc')->latest()->take(2)->get();
+                $productCount = Product::where('is_active', 1)->where('id', '<', $last_id)->orderBy('product_name', 'asc')->count();
+            } else if ($sort_select == "sort_Z-A") {
 
-                $products = Product::with(['category', 'board', 'publication'])->whereNotIn('id',$last_id)->where('is_active', 1)->orderBy('product_name','asc')->latest()->take(2)->get();
-                $productCount = Product::where('is_active', 1)->where('id','<',$last_id)->orderBy('product_name','asc')->count();
+                $products = Product::with(['category', 'board', 'publication'])->where('id', '<', $last_id)->where('is_active', 1)->orderBy('product_name', 'desc')->latest()->take(2)->get();
+                $productCount = Product::where('is_active', 1)->where('id', '<', $last_id)->orderBy('product_name', 'desc')->count();
+            } else if ($sort_select == "sort_Low-High") {
 
-            }else if($sort_select == "sort_Z-A"){
+                $products = Product::with(['category', 'board', 'publication'])->where('id', '<', $last_id)->where('is_active', 1)
+                    ->orderBy('sale_price', 'asc')->latest()->take(2)->get();
+                $productCount = Product::where('is_active', 1)->where('id', '<', $last_id)->orderBy('sale_price', 'asc')->count();
+            } else if ($sort_select == "sort_High-Low") {
 
-                $products = Product::with(['category', 'board', 'publication'])->where('id','<',$last_id)->where('is_active', 1)->orderBy('product_name','desc')->latest()->take(2)->get();
-                $productCount = Product::where('is_active', 1)->where('id','<',$last_id)->orderBy('product_name','desc')->count();
-
-            }else if($sort_select == "sort_Low-High"){
-
-                $products = Product::with(['category', 'board', 'publication'])->where('id','<',$last_id)->where('is_active', 1)
-                ->orderBy('sale_price','asc')->latest()->take(2)->get();
-                $productCount = Product::where('is_active', 1)->where('id','<',$last_id)->orderBy('sale_price','asc')->count();
-
-            }else if($sort_select == "sort_High-Low"){
-
-                $products = Product::with(['category', 'board', 'publication'])->where('id','<',$last_id)->where('is_active', 1)
-                ->orderBy('sale_price','desc')->latest()->take(2)->get();
-                $productCount = Product::where('is_active', 1)->where('id','<',$last_id)->orderBy('sale_price','desc')->count();
-
+                $products = Product::with(['category', 'board', 'publication'])->where('id', '<', $last_id)->where('is_active', 1)
+                    ->orderBy('sale_price', 'desc')->latest()->take(2)->get();
+                $productCount = Product::where('is_active', 1)->where('id', '<', $last_id)->orderBy('sale_price', 'desc')->count();
             }
             // array_push($prev,$products->pluck('id'))
             // dd($prev);
         }
 
-        return view('front.load_products',compact('products','productCount','page','sort_select'));
+        return view('front.load_products', compact('products', 'productCount', 'page', 'sort_select'));
     }
 }

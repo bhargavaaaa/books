@@ -1,5 +1,15 @@
 @extends('front.layouts.master')
 @section('content')
+    <style>
+        a.card-link:hover {
+            color: #62ab00 !important;
+        }
+
+        a.text-primary:hover {
+            color: #fff !important;
+        }
+
+    </style>
     <section class="breadcrumb-section">
         <h2 class="sr-only">Site Breadcrumb</h2>
         <div class="container">
@@ -110,16 +120,29 @@
                                 <input type="number" class="form-control text-center" value="1">
                             </div>
                             <div class="add-cart-btn">
-                                <a href="javascript:void(0)" data-id="{{ $product->id }}"
-                                    class="btn btn-outlined--primary"><span class="plus-icon">+</span>Add to
-                                    Cart</a>
+                                @if (session()->has('my_cart') && in_array($product->id, session('my_cart')))
+                                    <a href="{{ route('cart') }}" data-id="{{ $product->id }}"
+                                        class="btn btn-outlined--primary text-primary" title="Go To Cart"><i
+                                            class="fas fa-shopping-cart"></i> Go To Cart</a>
+                                @else
+                                    <a href="javascript:void(0)" data-id="{{ $product->id }}"
+                                        class="btn btn-outlined--primary addToCart"><span class="plus-icon">+</span>Add
+                                        to
+                                        Cart</a>
+                                @endif
                             </div>
                         </div>
-                        <div class="compare-wishlist-row">
-                            <a href="javascript:void(0)" data-id="{{ $product->id }}" class="add-link"><i
-                                    class="fas fa-heart"></i>Add to Wish List</a>
-                            <a href="javascript:void(0)" data-id="{{ $product->id }}" class="add-link"><i
-                                    class="fas fa-random"></i>Add to Compare</a>
+                        <div class="compare-wishlist-row pt-4" style="font-size:18px !important;">
+                            @if (session()->has('my_wishlist') && in_array($product->id, session('my_wishlist')))
+                                <a href="javascript:void(0)" data-id="{{ $product->id }}"
+                                    class="card-link remove-wishlist" title="Added To Wishlist"><i
+                                        class="fas fa-heart"></i> Added To Wishlist </a>
+                            @else
+                                <a href="javascript:void(0)" data-id="{{ $product->id }}"
+                                    class="card-link add-wishlist"><i class="fas fa-heart"></i> Add To
+                                    Wishlist</a>
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -221,49 +244,53 @@
                 </div>
             </div>
             <!-- <div class="tab-product-details">
-      <div class="brand">
-        <img src="image/others{{ asset('public/front/review-tab-product-details.jpg') }}" alt="">
-      </div>
-      <h5 class="meta">Reference <span class="small-text">demo_5</span></h5>
-      <h5 class="meta">In stock <span class="small-text">297 Items</span></h5>
-      <section class="product-features">
-        <h3 class="title">Data sheet</h3>
-        <dl class="data-sheet">
-          <dt class="name">Compositions</dt>
-          <dd class="value">Viscose</dd>
-          <dt class="name">Styles</dt>
-          <dd class="value">Casual</dd>
-          <dt class="name">Properties</dt>
-          <dd class="value">Maxi Dress</dd>
-        </dl>
-      </section>
-    </div> -->
+                          <div class="brand">
+                            <img src="image/others{{ asset('public/front/review-tab-product-details.jpg') }}" alt="">
+                          </div>
+                          <h5 class="meta">Reference <span class="small-text">demo_5</span></h5>
+                          <h5 class="meta">In stock <span class="small-text">297 Items</span></h5>
+                          <section class="product-features">
+                            <h3 class="title">Data sheet</h3>
+                            <dl class="data-sheet">
+                              <dt class="name">Compositions</dt>
+                              <dd class="value">Viscose</dd>
+                              <dt class="name">Styles</dt>
+                              <dd class="value">Casual</dd>
+                              <dt class="name">Properties</dt>
+                              <dd class="value">Maxi Dress</dd>
+                            </dl>
+                          </section>
+                        </div> -->
         </div>
         <!--=================================
-        RELATED PRODUCTS BOOKS
-    ===================================== -->
+                            RELATED PRODUCTS BOOKS
+                        ===================================== -->
         <section class="">
             <div class="container">
                 <div class="section-title section-title--bordered">
                     <h2>RELATED PRODUCTS</h2>
                 </div>
                 <div class="product-slider sb-slick-slider slider-border-single-row" data-slick-setting='{
-                    "autoplay": true,
-                    "autoplaySpeed": 8000,
-                    "slidesToShow": 4,
-                    "dots":true
-                }' data-slick-responsive='[
-                    {"breakpoint":1200, "settings": {"slidesToShow": 4} },
-                    {"breakpoint":992, "settings": {"slidesToShow": 3} },
-                    {"breakpoint":768, "settings": {"slidesToShow": 2} },
-                    {"breakpoint":480, "settings": {"slidesToShow": 1} }
-                ]'>
+                                        "autoplay": true,
+                                        "autoplaySpeed": 8000,
+                                        "slidesToShow": 4,
+                                        "dots":true
+                                    }' data-slick-responsive='[
+                                        {"breakpoint":1200, "settings": {"slidesToShow": 4} },
+                                        {"breakpoint":992, "settings": {"slidesToShow": 3} },
+                                        {"breakpoint":768, "settings": {"slidesToShow": 2} },
+                                        {"breakpoint":480, "settings": {"slidesToShow": 1} }
+                                    ]'>
                     @foreach ($relatedProducts as $related)
                         <div class="single-slide">
                             <div class="product-card">
                                 <div class="product-header">
                                     <a href="" class="author">
-                                        {{ $related->category[0]->category_name }}
+                                        @if (count($related->category) > 0)
+                                            {{ $related->category[0]->category_name }}
+                                        @else
+                                            <br>
+                                        @endif
                                     </a>
                                     <h3><a
                                             href="{{ route('product_detail', encrypt($related->id)) }}">{{ $related->product_name }}</a>
@@ -280,17 +307,21 @@
                                                     alt="">
                                             </a>
                                             <div class="hover-btns">
-                                                <a href="cart.html" class="single-btn">
-                                                    <i class="fas fa-shopping-basket"></i>
-                                                </a>
+
+                                                @if (session()->has('my_cart') && in_array($related->id, session('my_cart')))
+                                                    <a href="{{ route('cart') }}" data-id="{{ $related->id }}"
+                                                        class="single-btn" title="Go To Cart"><i class="fas fa-shopping-cart"></i> </a>
+                                                @else
+                                                    <a href="javascript:void(0)" data-id="{{ $related->id }}"
+                                                        class="single-btn addToCart">
+                                                            <i class="fas fa-shopping-basket"></i>
+                                                    </a>
+                                                @endif
                                                 <a href="wishlist.html" class="single-btn">
                                                     <i class="fas fa-heart"></i>
                                                 </a>
-                                                <a href="compare.html" class="single-btn">
-                                                    <i class="fas fa-random"></i>
-                                                </a>
-                                                <a href="#" data-toggle="modal"
-                                                 {{-- data-target="#quickModal" --}}
+
+                                                <a href="#" data-toggle="modal" {{-- data-target="#quickModal" --}}
                                                     data-id="{{ $related->id }}" class="single-btn viewRelated">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
@@ -310,171 +341,30 @@
                 </div>
             </div>
         </section>
-        <!-- Modal -->
-        <div class="modal fade modal-quick-view" id="quickModal" tabindex="-1" role="dialog" aria-labelledby="quickModal"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <button type="button" class="close modal-close-btn ml-auto" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <div class="product-details-modal">
-                        <div class="row">
-                            <div class="col-lg-5">
-                                <!-- Product Details Slider Big Image-->
-                                <div class="product-details-slider sb-slick-slider arrow-type-two"
-                                    data-slick-setting='{"slidesToShow": 1,"arrows": false,"fade": true,"draggable": false,"swipe": false,"asNavFor": ".product-slider-nav"}'>
-                                    <div class="single-slide">
-                                        <img src="{{ asset('public/front/image/products/product-details-1.jpg') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="single-slide">
-                                        <img src="{{ asset('public/front/image/products/product-details-2.jpg') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="single-slide">
-                                        <img src="{{ asset('public/front/image/products/product-details-3.jpg') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="single-slide">
-                                        <img src="{{ asset('public/front/image/products/product-details-4.jpg') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="single-slide">
-                                        <img src="{{ asset('public/front/image/products/product-details-5.jpg') }}"
-                                            alt="">
-                                    </div>
-                                </div>
-                                {{-- <!-- Product Details Slider Nav -->
-                                    <div class="mt--30 product-slider-nav sb-slick-slider arrow-type-two"
-                                        data-slick-setting='{"infinite":true,"autoplay": true,"autoplaySpeed": 8000,"slidesToShow": 4,"arrows": true,"prevArrow":{"buttonClass": "slick-prev","iconClass":"fa fa-chevron-left"},"nextArrow":{"buttonClass": "slick-next","iconClass":"fa fa-chevron-right"},"asNavFor": ".product-details-slider","focusOnSelect": true}'>
-                                        <div class="single-slide">
-                                            <img src="{{ asset('public/front/image/products/product-details-1.jpg') }}" alt="">
-                                        </div>
-                                        <div class="single-slide">
-                                            <img src="{{ asset('public/front/image/products/product-details-2.jpg') }}" alt="">
-                                        </div>
-                                        <div class="single-slide">
-                                            <img src="{{ asset('public/front/image/products/product-details-3.jpg') }}" alt="">
-                                        </div>
-                                        <div class="single-slide">
-                                            <img src="{{ asset('public/front/image/products/product-details-4.jpg') }}" alt="">
-                                        </div>
-                                        <div class="single-slide">
-                                            <img src="{{ asset('public/front/image/products/product-details-5.jpg') }}" alt="">
-                                        </div>
-                                    </div> --}}
-                            </div>
-                            <div class="col-lg-7 mt--30 mt-lg--30">
-                                <div class="product-details-info pl-lg--30 ">
-                                    <p class="tag-block">Tags: <a href="#">Movado</a>, <a href="#">Omega</a></p>
-                                    <h3 class="product-title">Beats EP Wired On-Ear Headphone-Black</h3>
-                                    <ul class="list-unstyled">
-                                        {{-- <li>Ex Tax: <span class="list-value"> ₹60.24</span></li> --}}
-                                        <li>Publication: <a href="#" class="list-value font-weight-bold"> publications</a></li>
-                                        <li>Product Code: <span class="list-value"> sku</span></li>
-                                        {{-- <li>Reward Points: <span class="list-value"> 200</span></li> --}}
-                                        {{-- <li>Availability: <span class="list-value"> In Stock</span></li> --}}
-                                    </ul>
-                                    <div class="price-block">
-                                        <span class="price-new">₹73.79</span>
-                                        <del class="price-old">₹91.86</del>
-                                    </div>
-                                    <div class="rating-widget">
-                                        <div class="rating-block">
-                                            <span class="fas fa-star star_on"></span>
-                                            <span class="fas fa-star star_on"></span>
-                                            <span class="fas fa-star star_on"></span>
-                                            <span class="fas fa-star star_on"></span>
-                                            <span class="fas fa-star "></span>
-                                        </div>
-                                        <div class="review-widget">
-                                            <a href="">(1 Reviews)</a> <span>|</span>
-                                            <a href="">Write a review</a>
-                                        </div>
-                                    </div>
-                                    <article class="product-details-article">
-                                        <h4 class="sr-only">Product Summery</h4>
-                                        <p>Long printed dress with thin adjustable straps. V-neckline and wiring
-                                            under the Dust with ruffles at the bottom
-                                            of the
-                                            dress.</p>
-                                    </article>
-                                    <div class="add-to-cart-row">
-                                        <div class="count-input-block">
-                                            <span class="widget-label">Qty</span>
-                                            <input type="number" class="form-control text-center" value="1">
-                                        </div>
-                                        <div class="add-cart-btn">
-                                            <a href="" class="btn btn-outlined--primary"><span
-                                                    class="plus-icon">+</span>Add to Cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="compare-wishlist-row">
-                                        <a href="" class="add-link"><i class="fas fa-heart"></i>Add to Wish
-                                            List</a>
-                                        <a href="" class="add-link"><i class="fas fa-random"></i>Add to Compare</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="widget-social-share">
-                            <span class="widget-label">Share:</span>
-                            <div class="modal-social-share">
-                                <a href="#" class="single-icon"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#" class="single-icon"><i class="fab fa-twitter"></i></a>
-                                <a href="#" class="single-icon"><i class="fab fa-youtube"></i></a>
-                                <a href="#" class="single-icon"><i class="fab fa-google-plus-g"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="modelView"></div>
     </main>
     </div>
 @endsection
 @section('script')
     <script>
-        $('body').on('click', '.viewRelated',function(e){
+        $('body').on('click', '.viewRelated', function(e) {
             related_product = $(this).data('id');
             $.ajax({
-                url: '{{ route("relatedproduct_detail") }}',
+                url: '{{ route('relatedproduct_detail') }}',
                 method: 'POST',
-                datatype: 'json',
-                data:{
-                    '_token':"{{ csrf_token() }}",
-                    id : related_product,
+                // datatype: 'json',
+                datatype: 'html',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    id: related_product,
                 },
-                success:function(res){
-                    var model = $('body').find('.product-details-modal');
-                    model.find('p.tag-block').text(res['categories']);
-
-                    model.find('h3.product-title').text(res['product']['product_name']);
-                    model.find('h3.product-title').text(res['product']['product_name']);
-                    model.find('.list-unstyled li:first .list-value').text(res['publications']);
-                    model.find('.list-unstyled li:last .list-value').text(res['product']['sku']);
-
-                    model.find('.price-block .price-new').text('₹'+ res['product']['sale_price']);
-                    model.find('.price-block .price-old').text('₹'+ res['product']['cutout_price']);
-
-                    model.find('.product-details-article p').html(res['product']['product_desc']);
-
-                    $('#quickModal').modal({show:true});
-
-                    model.find('.add-cart-btn a').attr('data-id',res['product']['id']);
-                    model.find('.compare-wishlist-row .add-link:first').attr('data-id',res['product']['id']);
-                    model.find('.compare-wishlist-row .add-link:last').attr('data-id',res['product']['id']);
-
-                    let src = model.find('.single-slide img').attr('src');
-                    if(res['product']['product_photo'] && res['product']['product_photo'] != null){
-                        model.find('.single-slide img').attr('src',res['product']['product_photo']);
-                    }
-                    // console.log(res['product']);
+                success: function(res) {
+                    $('body').find('#modelView').html(res);
+                    $('#quickModal').modal({
+                        show: true
+                    });
                 },
             });
-            });
+        });
     </script>
 @endsection

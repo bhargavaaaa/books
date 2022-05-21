@@ -343,8 +343,6 @@
                             <div class="compare-wishlist-row">
                                 <a href="" class="add-link"><i class="fas fa-heart"></i>Add to Wish
                                     List</a>
-                                <a href="" class="add-link"><i class="fas fa-random"></i>Add to
-                                    Compare</a>
                             </div>
                         </div>
                     </div>

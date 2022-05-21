@@ -26,6 +26,7 @@
             </div>
         </div> --}}
     </div>
+
     <div class="header-middle pt--10 pb--10">
         <div class="container">
             <div class="row align-items-center">
@@ -49,39 +50,64 @@
                             </div>
                             <div class="cart-block">
                                 <div class="cart-total">
+                                    @php
+                                        $cart_items = session('my_cart');
+                                        if ($cart_items != null) {
+                                            $cart_products = \App\Models\Product::whereIn('id', $cart_items)->take(2)->get(['id', 'product_name', 'product_photo', 'sale_price']);
+                                        } else {
+                                            $cart_products = [];
+                                        }
+
+                                    @endphp
                                     <span class="text-number">
-                                        1
+                                        {{ session()->has('my_cart') ? count(session('my_cart')) : 0 }}
                                     </span>
                                     <span class="text-item">
                                         Shopping Cart
                                     </span>
                                     <span class="price">
-                                        £0.00
+                                        ₹0.00
                                         <i class="fas fa-chevron-down"></i>
                                     </span>
                                 </div>
                                 <div class="cart-dropdown-block">
                                     <div class=" single-cart-block ">
-                                        <div class="cart-product">
-                                            <a href="product-details.html" class="image">
-                                                <img src="{{ asset('public/front/image/products/cart-product-1.jpg') }}"
-                                                    alt="">
-                                            </a>
-                                            <div class="content">
-                                                <h3 class="title"><a href="product-details.html">Kodak PIXPRO
-                                                        Astro Zoom AZ421 16 MP</a></h3>
-                                                <p class="price"><span class="qty">1 ×</span> £87.34
-                                                </p>
-                                                <button class="cross-btn"><i class="fas fa-times"></i></button>
-                                            </div>
-                                        </div>
+                                        @foreach ($cart_products as $cart_product)
+                                            @isset($cart_product)
+                                                <div class="cart-product">
+                                                    <a href="{{ route('product_detail',encrypt($cart_product->id)) }}" class="image">
+                                                        @if (isset($cart_product->product_photo))
+                                                            <img src="{{ asset('storage/app/product/' . $cart_product->product_photo) }}"
+                                                                alt="">
+                                                        @else
+                                                            <img src="{{ asset('public/front/image/products/cart-product-1.jpg') }}"
+                                                                alt="">
+                                                        @endif
+                                                    </a>
+                                                    <div class="content">
+                                                        <h3 class="title"><a href="{{ route('product_detail',encrypt($cart_product->id)) }}">
+                                                                {{ $cart_product->product_name }}
+                                                            </a></h3>
+                                                        <p class="price"><span class="qty">1 ×</span>
+                                                            ₹{{ $cart_product->sale_price }}
+                                                        </p>
+                                                        <button class="cross-btn removeToCart"
+                                                            data-id="{{ $cart_product->id }}"><i
+                                                                class="fas fa-times"></i></button>
+                                                    </div>
+                                                </div>
+                                            @endisset
+                                        @endforeach
                                     </div>
+                                    <a href="{{ route('cart') }}" class="justify-content-center d-flex text-primary mb-1">({{ count($cart_items) }}) See All <i class="fas fa-cart"></i></a>
                                     <div class=" single-cart-block ">
                                         <div class="btn-block">
-                                            <a href="cart.html" class="btn">View Cart <i
+                                            <a href="{{ route('cart') }}" class="btn">View Cart <i
                                                     class="fas fa-chevron-right"></i></a>
-                                            <a href="checkout.html" class="btn btn--primary">Check Out <i
-                                                    class="fas fa-chevron-right"></i></a>
+                                            @if(count($cart_products) > 0)
+                                                <a href="checkout.html" class="btn btn--primary">Check Out <i
+                                                        class="fas fa-chevron-right"></i></a>
+                                            @endisset
                                         </div>
                                     </div>
                                 </div>
@@ -218,7 +244,7 @@
                     <div class="mobile-header-btns header-top-widget">
                         <ul class="header-links">
                             <li class="sin-link">
-                                <a href="cart.html" class="cart-link link-icon"><i class="ion-bag"></i></a>
+                                <a href="{{ route('cart') }}" class="cart-link link-icon"><i class="ion-bag"></i></a>
                             </li>
                             <li class="sin-link">
                                 <a href="javascript:" class="link-icon hamburgur-icon off-canvas-btn"><i
@@ -253,7 +279,7 @@
                             <a href="{{ url('/') }}">Home</a>
                         </li>
                         <li class="menu-item-has-children">
-                            <a href="{{ route('front.product') }}">Shop</a>
+                            <a href="{{ route('product') }}">Shop</a>
                         </li>
                         <li><a href="{{ route('contactUs') }}">Contact</a></li>
                     </ul>
@@ -308,7 +334,7 @@
                         </li>
                         <!-- Shop -->
                         <li class="menu-item mega-menu">
-                            <a href="{{ route('front.product') }}">shop</a>
+                            <a href="{{ route('product') }}">shop</a>
                         </li>
                         <!-- Pages -->
                         <!-- Blog -->
@@ -319,7 +345,7 @@
 
                         <li class="menu-item has-children dropdown-trigger language-dropdown">
                             <a href="">
-                            My Account</a>
+                                My Account</a>
                             <i class="fas fa-chevron-down dropdown-arrow"></i>
                             <ul class="dropdown-box">
                                 <li> <a href="">My Account</a></li>

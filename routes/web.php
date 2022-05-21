@@ -47,7 +47,6 @@ Route::get('/clear-cache', function () {
 // })->name('site.home');
 
 
-Route::view('/cart','front.cart');
 Route::view('/checkout','front.checkout');
 Route::view('/compare','front.compare');
 // Route::view('/contact-2','front.contact-2');
@@ -59,7 +58,6 @@ Route::view('/order-details','front.order-details');
 Route::view('/product-details','front.product-details');
 Route::view('/product-details-affiliate','front.product-details-affiliate');
 Route::view('/shop-grid','front.shop-grid');
-Route::view('/wishlist','front.wishlist');
 Route::view('/shop-list','front.shop-list');
 
 
@@ -67,9 +65,19 @@ Route::group(['prefix' => '/'], function () {
     // Route::get('/', function () {return view('welcome');})->name('site.home');
     Route::get('/', [MainController::class, 'home'])->name('site.home');
 
-    Route::get('/product',[ProductController::class,'index'])->name('front.product');
+    Route::get('/product',[ProductController::class,'index'])->name('product');
     Route::get('/product_detail/{id}',[ProductController::class,'product_detail'])->name('product_detail');
     Route::post('/relatedproduct_detail',[ProductController::class,'relatedproduct_detail'])->name('relatedproduct_detail');
+
+    Route::post('/addWishlist',[MainController::class,'addWishlist'])->name('addWishlist');
+    Route::post('/removeWishlist',[MainController::class,'removeWishlist'])->name('removeWishlist');
+
+    Route::post('/addToCart',[MainController::class,'addToCart'])->name('addToCart');
+    Route::post('/removeToCart',[MainController::class,'removeToCart'])->name('removeToCart');
+
+    Route::get('/wishlist',[MainController::class,'wishlist'])->name('wishlist');
+    Route::get('/cart',[MainController::class,'cart'])->name('cart');
+    Route::post('/update_cart',[MainController::class,'update_cart'])->name('update_cart');
 
     Route::post('/load_products',[ProductController::class,'load_products'])->name('load_products');
     Route::view('/product-details','front.product-details');
